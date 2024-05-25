@@ -1,0 +1,42 @@
+import React from "react";
+import { Input, InputProps } from "@nextui-org/input";
+import { Control, Controller, FieldValues, Path } from "react-hook-form";
+
+interface Props<T extends FieldValues> extends InputProps {
+  name: Path<T>;
+  label: string;
+  control: Control<T>;
+}
+
+export default function InputControl<T extends FieldValues>({
+  name,
+  label,
+  control,
+  ...props
+}: Props<T>) {
+  return (
+    <Controller
+      control={control}
+      name={name}
+      render={({ formState, fieldState, field }) => (
+        <Input
+          label={label}
+          name={name}
+          disabled={formState.isSubmitting || field.disabled}
+          {...props}
+          isInvalid={
+            fieldState.invalid && (formState.isSubmitted || fieldState.isDirty)
+          }
+          errorMessage={fieldState.error?.message}
+          value={field.value}
+          onChange={(e) => {
+            const value =
+              props.type === "number" ? Number(e.target.value) : e.target.value;
+            field.onChange(value);
+          }}
+          onblur={field.onBlur}
+        />
+      )}
+    ></Controller>
+  );
+}
