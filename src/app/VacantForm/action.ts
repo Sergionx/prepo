@@ -1,21 +1,29 @@
 "use server";
 
+import { createClient } from "@/lib/utils/supabase/server";
 import { IVacantForm, vacantFormSchema } from "./schema";
 
 export async function createVacant(formData: FormData) {
-  const data = {
+  const dataToPost = {
     title: formData.get("title"),
     description: formData.get("description"),
     preparers: Number(formData.get("preparers")),
   };
 
   try {
-    const { title, description, preparers } = vacantFormSchema.parse(data);
+    const { title, description, preparers } =
+      vacantFormSchema.parse(dataToPost);
 
-    console.log("start");
-    await new Promise((resolve) => setTimeout(resolve, 10000));
+    const supabase = createClient();
 
-    console.log("end");
+    const { data, error } = await supabase
+      .from("vacancies")
+      .insert([{ title, description: description, preparers: preparers }])
+      .select();
+
+    if (error) return error;
+
+    return data;
   } catch (error) {
     return error;
   }
