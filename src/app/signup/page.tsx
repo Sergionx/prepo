@@ -9,6 +9,7 @@ import { Button } from "@nextui-org/button";
 import Image from "next/image";
 import SubmitButton from "@/lib/components/forms/SubmitButton";
 import SelectControl from "@/lib/components/forms/controls/SelectControl";
+import { signup } from "./action";
 
 const usuarios = [
   { key: "profesores", label: "Profesor" },
@@ -23,7 +24,14 @@ export default function SignUp() {
     resolver: zodResolver(signupSchema),
   });
 
-  const onSubmit: SubmitHandler<signUpForm> = (data) => {};
+  const onSubmit: SubmitHandler<signUpForm> = async (data) => {
+    const formData = new FormData();
+    for (let key in data) {
+      // @ts-ignore
+      formData.append(key, data[key]);
+    }
+    await signup(formData);
+  };
 
   return (
     <div className="flex flex-row  min-h-screen w-[100%]">
