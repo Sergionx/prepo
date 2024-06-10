@@ -5,7 +5,6 @@ import { emptyForm, signUpForm, signupSchema } from "./schema";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { Button } from "@nextui-org/button";
 import Image from "next/image";
 import SubmitButton from "@/lib/components/forms/SubmitButton";
 import SelectControl from "@/lib/components/forms/controls/SelectControl";
