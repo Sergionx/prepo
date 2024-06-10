@@ -6,8 +6,8 @@ import {
   Link,
   Button,
 } from "@nextui-org/react";
-import VacantList from "./VacantList/VacantList";
-import Skeleton from "./VacantList/Skeleton";
+import Skeleton from "./VacacyList/Skeleton";
+import VacancyListFetch from "./VacacyList/VacancyListFetch";
 
 export default function Homepage() {
   return (
@@ -42,7 +42,7 @@ export default function Homepage() {
           <h1 className="text-3xl font-bold mb-6">Bienvenido a Prepo</h1>
 
           <Suspense fallback={<Skeleton />}>
-            <VacantList />
+            <VacancyListFetch />
           </Suspense>
         </div>
       </main>
