@@ -34,7 +34,7 @@ export default function InputControl<T extends FieldValues>({
               props.type === "number" ? Number(e.target.value) : e.target.value;
             field.onChange(value);
           }}
-          onblur={field.onBlur}
+          onBlur={field.onBlur}
         />
       )}
     ></Controller>
