@@ -21,16 +21,13 @@ export default function TextareaControl<T extends FieldValues>({
       render={({ formState, fieldState, field }) => (
         <Textarea
           label={label}
-          name={name}
           disabled={formState.isSubmitting || field.disabled}
           {...props}
+          {...field}
           isInvalid={
             fieldState.invalid && (formState.isSubmitted || fieldState.isDirty)
           }
           errorMessage={fieldState.error?.message}
-          value={field.value}
-          onChange={field.onChange}
-          onBlur={field.onBlur}
         />
       )}
     ></Controller>
