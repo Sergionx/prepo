@@ -1,10 +1,10 @@
 "use client";
 
 import InputControl from "@/lib/components/forms/controls/InputControl";
-import { login, signup } from "./actions";
-import { useForm } from "react-hook-form";
+import { login } from "./actions";
+import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { emptyForm, loginSchema } from "./schema";
+import { ILoginForm, emptyForm, loginSchema } from "./schema";
 import { Button } from "@nextui-org/button";
 import Image from "next/image";
 import SubmitButton from "@/lib/components/forms/SubmitButton";
@@ -16,6 +16,15 @@ export default function LoginPage() {
     resolver: zodResolver(loginSchema),
   });
 
+  const onSubmit: SubmitHandler<ILoginForm> = async (data) => {
+    const formData = new FormData();
+    for (let key in data) {
+      // @ts-ignore
+      formData.append(key, data[key]);
+    }
+    await login(formData);
+  };
+
   return (
     <div className="flex flex-row  min-h-screen">
       <main className="flex flex-col justify-center p-10  max-w-md">
@@ -24,7 +33,10 @@ export default function LoginPage() {
           Para acceder al sistema, necesitamos la siguiente información de tu
           parte.
         </p>
-        <form className="flex flex-col gap-4 py-6 space-y-10">
+        <form
+          className="flex flex-col gap-4 py-6 space-y-10"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <fieldset className="col col-span-2 md:col-span-1">
             <InputControl label="Email" control={control} name="email" />
           </fieldset>
