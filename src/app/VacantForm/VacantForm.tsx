@@ -3,7 +3,7 @@
 import SubmitButton from "@/lib/components/forms/SubmitButton";
 import { Button } from "@nextui-org/button";
 import { IconNumber123 } from "@tabler/icons-react";
-import { createVacant } from "./action";
+import { submitVacancy } from "./action";
 
 import InputControl from "@/lib/components/forms/controls/InputControl";
 import TextareaControl from "@/lib/components/forms/controls/TextareaControl";
@@ -30,7 +30,7 @@ export default function VacantForm({ subjects }: Props) {
       // @ts-ignore
       formData.append(key, data[key]);
     }
-    await createVacant(formData);
+    await submitVacancy(formData);
   };
 
   return (
