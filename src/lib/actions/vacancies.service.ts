@@ -1,6 +1,43 @@
 "use server";
-import { Vacancy } from "../models/Vacancy";
+import { QueryData } from "@supabase/supabase-js";
+import { Vacancy, VacancySubjectName } from "../models/Vacancy";
 import { createClient } from "../utils/supabase/server";
+
+export async function getVacancies(): Promise<Vacancy[]> {
+  const supabase = createClient();
+
+  let { data: vacancies, error } = await supabase.from("Vacancies").select("*");
+
+  if (error) {
+    throw error;
+  }
+
+  if (!vacancies) {
+    return [];
+  }
+
+  return vacancies;
+}
+
+export async function getVacancies_SubjectName(): Promise<
+  VacancySubjectName[]
+> {
+  const supabase = createClient();
+
+  let { data: vacancies, error } = await supabase
+    .from("Vacancies")
+    .select("*, subject:Materia(nombre)");
+
+  if (error) {
+    throw error;
+  }
+
+  if (!vacancies) {
+    return [];
+  }
+
+  return vacancies;
+}
 
 export async function createVacancy({
   id_materia,
