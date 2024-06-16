@@ -21,20 +21,18 @@ export default function InputControl<T extends FieldValues>({
       render={({ formState, fieldState, field }) => (
         <Input
           label={label}
-          name={name}
           disabled={formState.isSubmitting || field.disabled}
           {...props}
+          {...field}
           isInvalid={
             fieldState.invalid && (formState.isSubmitted || fieldState.isDirty)
           }
           errorMessage={fieldState.error?.message}
-          value={field.value}
           onChange={(e) => {
             const value =
               props.type === "number" ? Number(e.target.value) : e.target.value;
             field.onChange(value);
           }}
-          onblur={field.onBlur}
         />
       )}
     ></Controller>

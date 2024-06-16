@@ -1,4 +1,4 @@
-import { Vacancy } from "@/lib/models/Vacancy";
+import { VacancySubjectName } from "@/lib/models/Vacancy";
 import { Button } from "@nextui-org/button";
 import {
   Modal,
@@ -9,23 +9,17 @@ import {
 } from "@nextui-org/modal";
 
 interface Props {
-  vacancy: Vacancy | null;
+  vacancy: VacancySubjectName | null;
   onClose: () => void;
 }
 export default function ModalVacant({ vacancy, onClose }: Props) {
-  if (!vacancy) return null;
-
   return (
-    <Modal
-      isOpen={!!vacancy}
-      isDismissable
-      onClose={onClose}
-    >
+    <Modal isOpen={!!vacancy} isDismissable onClose={onClose}>
       <ModalContent>
-        {() => (
+        {vacancy && (
           <>
             <ModalHeader className="flex flex-col gap-1">
-              {vacancy.title}
+              {vacancy.subject.nombre}
             </ModalHeader>
             <ModalBody>{vacancy.description}</ModalBody>
 

@@ -3,15 +3,21 @@
 import SubmitButton from "@/lib/components/forms/SubmitButton";
 import { Button } from "@nextui-org/button";
 import { IconNumber123 } from "@tabler/icons-react";
-import { createVacant } from "./action";
+import { submitVacancy } from "./action";
 
 import InputControl from "@/lib/components/forms/controls/InputControl";
 import TextareaControl from "@/lib/components/forms/controls/TextareaControl";
 import { IVacantForm, emptyForm, vacantFormSchema } from "./schema";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import AutoCompleteControl from "@/lib/components/forms/controls/AutoCompleteControl";
+import { Subject } from "@/lib/models/Subject";
 
-export default function VacantForm() {
+interface Props {
+  subjects: Subject[];
+}
+
+export default function VacantForm({ subjects }: Props) {
   const { control, formState, handleSubmit } = useForm({
     defaultValues: { ...emptyForm },
     mode: "all",
@@ -24,7 +30,7 @@ export default function VacantForm() {
       // @ts-ignore
       formData.append(key, data[key]);
     }
-    await createVacant(formData);
+    await submitVacancy(formData);
   };
 
   return (
@@ -40,7 +46,15 @@ export default function VacantForm() {
       </h4>
 
       <div className="flex flex-row gap-4">
-        <InputControl label="Título" control={control} name="title" />
+        <AutoCompleteControl
+          label="Materia"
+          control={control}
+          name="subject"
+          items={subjects.map((subject) => ({
+            value: subject.id_materia,
+            label: subject.nombre,
+          }))}
+        />
 
         <InputControl
           label="Preparadores"

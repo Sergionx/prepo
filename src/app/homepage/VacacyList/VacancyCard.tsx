@@ -1,10 +1,10 @@
-import { Vacancy } from "@/lib/models/Vacancy";
-import { Card, CardBody } from "@nextui-org/react";
+import { Vacancy, VacancySubjectName } from "@/lib/models/Vacancy";
+import { Card, CardBody, CardFooter, CardHeader, cn } from "@nextui-org/react";
 import Image from "next/image";
 
 interface Props {
-  vacancy: Vacancy;
-  setVacancy: (vacancy: Vacancy) => void;
+  vacancy: VacancySubjectName;
+  setVacancy: (vacancy: VacancySubjectName) => void;
 }
 
 export default function VacancyCard({ vacancy, setVacancy }: Props) {
@@ -14,18 +14,32 @@ export default function VacancyCard({ vacancy, setVacancy }: Props) {
       onPress={() => {
         setVacancy(vacancy);
       }}
+      className="h-[300px]"
     >
+      <CardHeader className="absolute z-10 top-1 flex-col items-start">
+        <h3 className="text-black font-medium text-2xl pr-4">
+          {vacancy.subject.nombre}
+        </h3>
+
+        <span
+          className={cn(
+            "absolute top-2 right-2 rounded-full h-3 w-3",
+            !vacancy.abierto ? "bg-green-500" : "bg-red-500"
+          )}
+        ></span>
+      </CardHeader>
+      {/* <CardBody>
+      </CardBody> */}
       <Image
-        alt={vacancy.title}
-        className="w-fulls object-cover rounded-t-lg"
-        height="300"
+        alt={vacancy.id_materia}
+        className="w-full object-cover rounded-t-lg"
         src="/facultad_ciencias.jpg"
-        width="400"
+        fill
       />
-      <CardBody>
-        <h3 className="text-lg font-semibold mb-2">{vacancy.title}</h3>
-        <p className="text-gray-500">{vacancy.description}</p>
-      </CardBody>
+
+      <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+        <p className="text-gray-500 line-clamp-2">{vacancy.description}</p>
+      </CardFooter>
     </Card>
   );
 }
