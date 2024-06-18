@@ -4,24 +4,27 @@ import { createVacancy } from "@/lib/actions/vacancies.service";
 import { postulationFormSchema } from "./schema";
 import { createPostulation } from "@/lib/actions/postulation.service";
 
-export async function submitVacancy(formData: FormData, id_vacante: number) {
+export async function submitPostulation(
+  formData: FormData,
+  subject: string,
+  id_vacante: number
+) {
   const dataToPost = {
-    subject: formData.get("subject"),
-    description: formData.get("description"),
-    preparers: Number(formData.get("preparers")),
+    description: formData.get("description") as string,
+    grade: Number(formData.get("grade")),
   };
 
-  console.log(dataToPost);
   try {
     const { description, grade } = postulationFormSchema.parse(dataToPost);
 
-    return await createPostulation({
+    await createPostulation({
       description,
       grade,
       id_vacante,
     });
-  } catch (error) {
-    console.log(error);
-    return error;
+
+    return `Postulación creada con éxito con para la materia ${subject}`;
+  } catch (error: any) {
+    throw Error(`No se pudo enviar la postulación: ${error.message}`);
   }
 }

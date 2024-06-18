@@ -1,3 +1,4 @@
+"use client";
 import SubmitButton from "@/lib/components/forms/SubmitButton";
 import { VacancySubjectName } from "@/lib/models/Vacancy";
 import { Button } from "@nextui-org/button";
@@ -8,28 +9,44 @@ import {
   ModalFooter,
   ModalHeader,
 } from "@nextui-org/modal";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { IPostulationForm, emptyForm, postulationFormSchema } from "./schema";
 import InputControl from "@/lib/components/forms/controls/InputControl";
 import TextareaControl from "@/lib/components/forms/controls/TextareaControl";
 import { zodResolver } from "@hookform/resolvers/zod";
+import useFormSubmit from "@/lib/hooks/useFormSubmit";
+import { submitPostulation } from "./action";
+import { getFormData } from "@/lib/utils/forms";
 
 interface Props {
   vacancy: VacancySubjectName | null;
   onClose: () => void;
 }
-export default function ModalPostulationForm({ vacancy, onClose }: Props) {
-  const { handleSubmit, formState, control } = useForm<IPostulationForm>({
-    defaultValues: emptyForm,
-    mode: "all",
-    resolver: zodResolver(postulationFormSchema),
-  });
 
-  const onSubmit: SubmitHandler<IPostulationForm> = (data) => {
-    try {
+// TODO - Intentar hacer fetch con id de estudiante para saber si se postuló y habilitar el edit
+export default function ModalPostulationForm({ vacancy, onClose }: Props) {
+  const { handleSubmit, formState, control, reset } = useForm<IPostulationForm>(
+    {
+      defaultValues: emptyForm,
+      mode: "all",
+      resolver: zodResolver(postulationFormSchema),
+    }
+  );
+
+  const { onSubmit } = useFormSubmit({
+    mode: "add",
+    addAction: (data) => {
+      if (!vacancy?.id)
+        return Promise.resolve("No se pudo enviar la postulación");
+      const formData = getFormData(data);
+      return submitPostulation(formData, vacancy.subject.nombre, vacancy?.id);
+    },
+    onSucess: () => {
       onClose();
-    } catch (error) {}
-  };
+      reset();
+    },
+    formState,
+  });
 
   return (
     <Modal

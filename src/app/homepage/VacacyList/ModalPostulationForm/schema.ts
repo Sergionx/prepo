@@ -13,7 +13,7 @@ export const postulationFormSchema = z.object({
   grade: z
     .number()
     .int()
-    .positive("La nota debe ser un número positivo")
+    .min(10, "La nota debe ser mínimo 10")
     .max(20, "La nota no puede ser mayor a 20"),
 });
 
