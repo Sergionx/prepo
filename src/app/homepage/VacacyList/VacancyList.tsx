@@ -1,9 +1,9 @@
 "use client";
 
-import { Vacancy, VacancySubjectName } from "@/lib/models/Vacancy";
-import ModalVacant from "./ModalVacant";
+import { VacancySubjectName } from "@/lib/models/Vacancy";
 import { useState } from "react";
 import VacancyCard from "./VacancyCard";
+import ModalPostulationForm from "./ModalPostulationForm/ModalPostulationForm";
 
 export default function VacancyList({
   vacancies,
@@ -24,7 +24,10 @@ export default function VacancyList({
         ))}
       </div>
 
-      <ModalVacant vacancy={vacancy} onClose={() => setVacancy(null)} />
+      <ModalPostulationForm
+        vacancy={vacancy}
+        onClose={() => setVacancy(null)}
+      />
     </>
   );
 }

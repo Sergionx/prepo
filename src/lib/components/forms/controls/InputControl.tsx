@@ -14,6 +14,8 @@ export default function InputControl<T extends FieldValues>({
   control,
   ...props
 }: Props<T>) {
+  const { onChange: onChangeInput } = props;
+
   return (
     <Controller
       control={control}
@@ -31,6 +33,8 @@ export default function InputControl<T extends FieldValues>({
           onChange={(e) => {
             const value =
               props.type === "number" ? Number(e.target.value) : e.target.value;
+
+            onChangeInput?.(e);
             field.onChange(value);
           }}
         />

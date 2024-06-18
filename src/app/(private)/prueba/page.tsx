@@ -10,19 +10,16 @@ import {
   TableCell,
   Input,
   Button,
-  DropdownTrigger,
-  Dropdown,
-  DropdownMenu,
-  DropdownItem,
   Chip,
   User,
   Pagination,
   Selection,
   ChipProps,
+  Tooltip,
 } from "@nextui-org/react";
 
 import { columns, users, statusOptions } from "./data";
-import { IconDotsVertical, IconPlus, IconSearch } from "@tabler/icons-react";
+import { IconBan, IconCheck, IconSearch } from "@tabler/icons-react";
 
 import useFilterTable from "@/lib/hooks/table/useStatusFilter-Table";
 import useSortingTable from "@/lib/hooks/table/useSorting-Table";
@@ -107,20 +104,16 @@ export default function App() {
         );
       case "actions":
         return (
-          <div className="relative flex justify-end items-center gap-2">
-            <Dropdown>
-              <DropdownTrigger>
-                <Button isIconOnly size="sm" variant="light">
-                  <IconDotsVertical className="text-default-300" />
-                </Button>
-              </DropdownTrigger>
-              <DropdownMenu>
-                <DropdownItem>View</DropdownItem>
-                <DropdownItem>Edit</DropdownItem>
-                <DropdownItem>Delete</DropdownItem>
-              </DropdownMenu>
-            </Dropdown>
-          </div>
+          <Tooltip color="success" content={`Aceptar ${user.name}`}>
+            <Button
+              isIconOnly
+              variant="light"
+              color="success"
+              className="text-lg active:opacity-50"
+            >
+              <IconCheck />
+            </Button>
+          </Tooltip>
         );
       default:
         return cellValue;
@@ -191,8 +184,13 @@ export default function App() {
               options={columns}
             />
 
-            <Button color="primary" endContent={<IconPlus />}>
-              Add New
+            <Button
+              color="danger"
+              onClick={() => console.log(selectedKeys)}
+              className="ml-auto h-auto"
+              startContent={<IconBan />}
+            >
+              Descalificar seleccionados
             </Button>
           </div>
         </section>
@@ -275,6 +273,7 @@ export default function App() {
       }}
       selectedKeys={selectedKeys}
       selectionMode="multiple"
+      color="danger"
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"
@@ -292,7 +291,7 @@ export default function App() {
           </TableColumn>
         )}
       </TableHeader>
-      <TableBody emptyContent={"No users found"} items={items}>
+      <TableBody emptyContent="No hay estudiantes postulados aún" items={items}>
         {(item) => (
           <TableRow key={item.id}>
             {(columnKey) => (

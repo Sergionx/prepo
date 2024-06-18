@@ -9,7 +9,6 @@ interface Props {
 export default function useSelectColumnsTable({
   initialVisibleColumns,
 }: Props) {
-  const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     new Set(initialVisibleColumns)
   );
