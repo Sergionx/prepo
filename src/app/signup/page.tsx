@@ -9,27 +9,48 @@ import Image from "next/image";
 import SubmitButton from "@/lib/components/forms/SubmitButton";
 import SelectControl from "@/lib/components/forms/controls/SelectControl";
 import { signup } from "./action";
+import { createUserService } from "@/lib/actions/user.service";
+import { useState } from "react";
+
+const USER_TYPE = {
+  TEACHER: {
+    name: "Estudiante",
+    id: "1",
+  },
+  STUDENT: {
+    name: "Coordinador",
+    id: "2",
+  },
+  COORDINATOR: {
+    name: "Profesor",
+    id: "3",
+  },
+};
 
 const usuarios = [
-  { key: "profesores", label: "Profesor" },
-  { key: "estudiante", label: " Estudiante" },
-  { key: "Coordinador", label: "Coordinador" },
+  { key: USER_TYPE.TEACHER.id, label: USER_TYPE.TEACHER.name },
+  { key: USER_TYPE.STUDENT.id, label: USER_TYPE.STUDENT.name },
+  { key: USER_TYPE.COORDINATOR.id, label: USER_TYPE.COORDINATOR.name },
 ];
 
 export default function SignUp() {
-  const { control, formState, handleSubmit } = useForm({
+  const { control, formState, handleSubmit, setValue } = useForm({
     defaultValues: { ...emptyForm },
     mode: "all",
     resolver: zodResolver(signupSchema),
   });
 
+  const [showAdditionalInput, setShowAdditionalInput] = useState(false);
+
   const onSubmit: SubmitHandler<signUpForm> = async (data) => {
-    const formData = new FormData();
-    for (let key in data) {
-      // @ts-ignore
-      formData.append(key, data[key]);
-    }
-    await signup(formData);
+    await createUserService(data);
+    await signup(data);
+  };
+
+  const handleUserTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+    const value = e.target.value as string;
+    setValue("type", value);
+    setShowAdditionalInput(value === USER_TYPE.STUDENT.id);
   };
 
   return (
@@ -74,6 +95,7 @@ export default function SignUp() {
             errorMessage="Please enter a valid email"
             className="max-w-xs"
           />
+
           <InputControl
             label="Carnet o cedula"
             control={control}
@@ -81,13 +103,24 @@ export default function SignUp() {
             type="id"
             className="max-w-xs"
           />
+
           <SelectControl
             label="Tipo de usuario"
             control={control}
             name="type"
             items={usuarios}
             className="max-w-xs"
+            onChange={({ target: { value } }) => setValue("type", value)}
           />
+          {showAdditionalInput && (
+            <InputControl
+              label="Campo adicional"
+              control={control}
+              name="type"
+              type="text"
+              className="max-w-xs"
+            />
+          )}
 
           <SubmitButton
             text="Iniciar Sesión"
