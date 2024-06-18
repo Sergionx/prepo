@@ -4,5 +4,5 @@ export interface Postulation {
   createdAt: string;
   aceptada: boolean;
   nota: number;
-  description: string;
+  descripcion: string;
 }
