@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@nextui-org/react";
 // TODO - Usar cn para las variantes
 import * as RadixToast from "@radix-ui/react-toast";
 import { IconX } from "@tabler/icons-react";
@@ -31,6 +32,7 @@ interface Message {
   id: string;
   title: string;
   description?: string;
+  variant?: "default" | "success" | "error" | "warning";
 }
 export type MessageNoId = Omit<Message, "id">;
 
@@ -80,13 +82,15 @@ const Toast = forwardRef<
   let width = 320;
   let margin = 16;
 
+  const { variant = "default" } = message;
+
   return (
     <RadixToast.Root
       ref={forwardedRef}
       asChild
       forceMount
       onOpenChange={onClose}
-      duration={250000}
+      duration={2500}
     >
       <motion.li
         layout
@@ -110,8 +114,18 @@ const Toast = forwardRef<
         style={{ width, WebkitTapHighlightColor: "transparent" }}
       >
         <div
-          className="flex items-center justify-between 
-          rounded-lg border border-gray-600 bg-gray-700 text-sm text-white shadow-sm backdrop-blur"
+          className={cn(
+            "flex items-center justify-between rounded-lg border shadow-sm backdrop-blur",
+            {
+              "bg-gray-800 border-gray-600 text-gray-300":
+                variant === "default",
+              "bg-green-800 border-green-600 text-green-300":
+                variant === "success",
+              "bg-red-800 border-red-600 text-red-300": variant === "error",
+              "bg-yellow-800 border-yellow-600 text-yellow-300":
+                variant === "warning",
+            }
+          )}
         >
           <main className="pr-2 p-4">
             <RadixToast.Title className="font-bold">
@@ -120,7 +134,7 @@ const Toast = forwardRef<
 
             <RadixToast.Description
               className="hover:line-clamp-none hover:max-h-24
-              max-h-16 line-clamp-3 transition-height
+              max-h-[4.5rem] line-clamp-3 transition-height
               text-slate-300/80"
             >
               {message.description}
@@ -129,9 +143,15 @@ const Toast = forwardRef<
 
           {/* TODO - Que tome el heigth disponible h-full no funciona */}
           <RadixToast.Close
-            className="border-l border-gray-600/50  
-            hover:bg-gray-600/30 hover:text-gray-300 active:text-white
-            p-4 text-gray-500 transition"
+            className={cn(
+              "border-l transition p-4 hover:text-gray-300 active:text-white hover:bg-gray-600/30",
+              {
+                "border-gray-600/50 text-gray-500": variant === "default",
+                "border-green-600/50 text-green-200": variant === "success",
+                "border-red-600/50 text-red-200": variant === "error",
+                "border-yellow-600/50 text-yellow-200": variant === "warning",
+              }
+            )}
           >
             <IconX className="h-5 w-5" />
           </RadixToast.Close>
