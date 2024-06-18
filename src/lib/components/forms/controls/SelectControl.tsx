@@ -18,11 +18,16 @@ export default function SelectControl<T extends FieldValues>({
   label,
   control,
   items,
+  onChange,
   ...props
 }: Props<T>) {
   return (
     <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
-      <Select label={label} {...props}>
+      <Select
+        label={label}
+        {...props}
+        onChange={onChange ? onChange : undefined}
+      >
         {items.map((usuario) => (
           <SelectItem key={usuario.key}>{usuario.label}</SelectItem>
         ))}
