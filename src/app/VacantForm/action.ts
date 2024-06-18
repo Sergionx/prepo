@@ -10,18 +10,18 @@ export async function submitVacancy(formData: FormData) {
     preparers: Number(formData.get("preparers")),
   };
 
-  console.log(dataToPost);
   try {
     const { subject, description, preparers } =
       vacantFormSchema.parse(dataToPost);
 
-    return await createVacancy({
+    await createVacancy({
       description,
       preparers,
       id_materia: subject,
     });
-  } catch (error) {
-    console.log(error)
-    return error;
+
+    return `Vacante creada con éxito para la materia ${subject}`;
+  } catch (error: any) {
+    throw Error(`No se pudo crear la vacante: ${error.message}`);
   }
 }

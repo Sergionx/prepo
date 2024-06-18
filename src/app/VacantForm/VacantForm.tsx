@@ -12,6 +12,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AutoCompleteControl from "@/lib/components/forms/controls/AutoCompleteControl";
 import { Subject } from "@/lib/models/Subject";
+import useFormSubmit from "@/lib/hooks/useFormSubmit";
+import { getFormData } from "@/lib/utils/forms";
 
 interface Props {
   subjects: Subject[];
@@ -24,14 +26,14 @@ export default function VacantForm({ subjects }: Props) {
     resolver: zodResolver(vacantFormSchema),
   });
 
-  const onSubmit: SubmitHandler<IVacantForm> = async (data) => {
-    const formData = new FormData();
-    for (let key in data) {
-      // @ts-ignore
-      formData.append(key, data[key]);
-    }
-    await submitVacancy(formData);
-  };
+  const { onSubmit } = useFormSubmit({
+    mode: "add",
+    addAction: (data) => {
+      const formData = getFormData(data);
+      return submitVacancy(formData);
+    },
+    formState,
+  });
 
   return (
     <form
@@ -63,6 +65,7 @@ export default function VacantForm({ subjects }: Props) {
           type="number"
           className="basis-1/3"
           startContent={<IconNumber123 stroke={2} />}
+          min={1}
         />
       </div>
 
