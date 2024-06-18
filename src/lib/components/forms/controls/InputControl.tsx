@@ -23,9 +23,9 @@ export default function InputControl<T extends FieldValues>({
       render={({ formState, fieldState, field }) => (
         <Input
           label={label}
-          disabled={formState.isSubmitting || field.disabled}
           {...props}
           {...field}
+          disabled={formState.isSubmitting || field.disabled || props.disabled}
           isInvalid={
             fieldState.invalid && (formState.isSubmitted || fieldState.isDirty)
           }
@@ -37,6 +37,7 @@ export default function InputControl<T extends FieldValues>({
             onChangeInput?.(e);
             field.onChange(value);
           }}
+          className="disabled:opacity-50"
         />
       )}
     ></Controller>

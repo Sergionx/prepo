@@ -32,9 +32,9 @@ export default function AutoCompleteControl<T extends FieldValues>({
       render={({ formState, fieldState, field }) => (
         <Autocomplete
           label={label}
-          disabled={formState.isSubmitting || field.disabled}
           {...props}
           {...field}
+          disabled={formState.isSubmitting || field.disabled || props.disabled}
           isInvalid={
             fieldState.invalid && (formState.isSubmitted || fieldState.isDirty)
           }
@@ -42,7 +42,6 @@ export default function AutoCompleteControl<T extends FieldValues>({
           onChange={(e) => {
             const value =
               props.type === "number" ? Number(e.target.value) : e.target.value;
-            console.log({ value });
             field.onChange(value);
           }}
           selectedKey={field.value}

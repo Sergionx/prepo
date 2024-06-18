@@ -21,9 +21,9 @@ export default function TextareaControl<T extends FieldValues>({
       render={({ formState, fieldState, field }) => (
         <Textarea
           label={label}
-          disabled={formState.isSubmitting || field.disabled}
           {...props}
           {...field}
+          disabled={formState.isSubmitting || field.disabled || props.disabled}
           isInvalid={
             fieldState.invalid && (formState.isSubmitted || fieldState.isDirty)
           }
