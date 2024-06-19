@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils/classNames";
 import {
   Autocomplete,
   AutocompleteItem,
@@ -23,6 +24,7 @@ export default function AutoCompleteControl<T extends FieldValues>({
   name,
   label,
   control,
+  className,
   ...props
 }: Props<T>) {
   return (
@@ -46,6 +48,7 @@ export default function AutoCompleteControl<T extends FieldValues>({
           }}
           selectedKey={field.value}
           onSelectionChange={field.onChange}
+          className={cn("disabled:opacity-50", className)}
         >
           {props.items.map((item) => (
             <AutocompleteItem key={item.value} value={item.value}>

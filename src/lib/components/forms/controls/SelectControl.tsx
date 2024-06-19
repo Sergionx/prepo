@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils/classNames";
 import { Select, SelectItem, SelectProps } from "@nextui-org/react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 
@@ -19,6 +20,7 @@ export default function SelectControl<T extends FieldValues>({
   control,
   items,
   onChange,
+  className,
   ...props
 }: Props<T>) {
   return (
@@ -37,9 +39,10 @@ export default function SelectControl<T extends FieldValues>({
           errorMessage={fieldState.error?.message}
           selectedKeys={field.value}
           onSelectionChange={field.onChange}
+          className={cn("disabled:opacity-50", className)}
         >
-          {items.map((usuario) => (
-            <SelectItem key={usuario.key}>{usuario.label}</SelectItem>
+          {items.map((item) => (
+            <SelectItem key={item.key}>{item.label}</SelectItem>
           ))}
         </Select>
       )}

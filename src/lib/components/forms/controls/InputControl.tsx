@@ -1,6 +1,7 @@
 import React from "react";
 import { Input, InputProps } from "@nextui-org/input";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
+import { cn } from "@/lib/utils/classNames";
 
 interface Props<T extends FieldValues> extends InputProps {
   name: Path<T>;
@@ -12,6 +13,7 @@ export default function InputControl<T extends FieldValues>({
   name,
   label,
   control,
+  className,
   ...props
 }: Props<T>) {
   const { onChange: onChangeInput } = props;
@@ -37,7 +39,7 @@ export default function InputControl<T extends FieldValues>({
             onChangeInput?.(e);
             field.onChange(value);
           }}
-          className="disabled:opacity-50"
+          className={cn("disabled:opacity-50", className)}
         />
       )}
     ></Controller>
