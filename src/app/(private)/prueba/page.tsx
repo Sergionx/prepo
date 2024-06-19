@@ -226,6 +226,7 @@ export default function App() {
     onClear,
     setStatusFilter,
     setVisibleColumns,
+    selectedKeys,
   ]);
 
   const bottomContent = useMemo(() => {
@@ -273,6 +274,7 @@ export default function App() {
     onNextPage,
     onPreviousPage,
     setPage,
+    filteredItems.length,
   ]);
 
   return (
