@@ -124,35 +124,38 @@ export default function App() {
     if (page < pages) {
       setPage(page + 1);
     }
-  }, [page, pages]);
+  }, [page, pages, setPage]);
 
   const onPreviousPage = useCallback(() => {
     if (page > 1) {
       setPage(page - 1);
     }
-  }, [page]);
+  }, [page, setPage]);
 
   const onRowsPerPageChange = useCallback(
     (e: React.ChangeEvent<HTMLSelectElement>) => {
       setRowsPerPage(Number(e.target.value));
       setPage(1);
     },
-    []
+    [setPage, setRowsPerPage]
   );
 
-  const onSearchChange = useCallback((value?: string) => {
-    if (value) {
-      setInputFilterValue(value);
-      setPage(1);
-    } else {
-      setInputFilterValue("");
-    }
-  }, []);
+  const onSearchChange = useCallback(
+    (value?: string) => {
+      if (value) {
+        setInputFilterValue(value);
+        setPage(1);
+      } else {
+        setInputFilterValue("");
+      }
+    },
+    [setInputFilterValue, setPage]
+  );
 
   const onClear = useCallback(() => {
     setInputFilterValue("");
     setPage(1);
-  }, []);
+  }, [setInputFilterValue, setPage]);
 
   const topContent = useMemo(() => {
     return (
@@ -220,7 +223,9 @@ export default function App() {
     visibleColumns,
     onSearchChange,
     onRowsPerPageChange,
-    users.length,
+    onClear,
+    setStatusFilter,
+    setVisibleColumns,
   ]);
 
   const bottomContent = useMemo(() => {
@@ -260,7 +265,15 @@ export default function App() {
         </div>
       </div>
     );
-  }, [selectedKeys, items.length, page, pages]);
+  }, [
+    selectedKeys,
+    items.length,
+    page,
+    pages,
+    onNextPage,
+    onPreviousPage,
+    setPage,
+  ]);
 
   return (
     <Table
