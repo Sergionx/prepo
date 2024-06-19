@@ -29,11 +29,11 @@ export default function useInputFilterTable<T>({
     }
 
     return filteredUsers;
-  }, [data, inputFilterValue]);
+  }, [data, inputFilterValue, hasSearchFilter, inputKeyFilter]);
 
   return {
     filteredItems,
     inputFilterValue,
-     setInputFilterValue,
+    setInputFilterValue,
   };
 }

@@ -39,6 +39,25 @@ export async function getVacancies_SubjectName(): Promise<
   return vacancies;
 }
 
+export async function getVacancies_SubjectName_ById(vacancyId: number) {
+  const supabase = createClient();
+
+  let { data, error } = await supabase
+    .from("Vacancies")
+    .select("*, subject:Materia(nombre)")
+    .eq("id", vacancyId);
+
+  if (error) {
+    throw error;
+  }
+
+  if (!data) return null;
+
+  const vacancy = data[0] as VacancySubjectName;
+
+  return vacancy;
+}
+
 export async function createVacancy({
   id_materia,
   description,
@@ -60,7 +79,7 @@ export async function createVacancy({
     })
     .select();
 
-  if (error) return error;
+  if (error) throw error;
 
   const vacancy = data[0] as Vacancy;
 

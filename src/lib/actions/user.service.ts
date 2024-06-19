@@ -1,15 +1,13 @@
 "use server";
 
-import { signUpForm } from "@/app/signup/schema";
+import { signUpForm } from "@/app/(auth_pages)/signup/schema";
 import { createClient } from "../utils/supabase/server";
-import { ILoginForm } from "@/app/login/schema";
+import { ILoginForm } from "@/app/(auth_pages)/login/schema";
 
 function validarCorreo(correo: string) {
   const regex = /^[a-zA-Z0-9._%+-]+@(?:correo.unimet.edu.ve|unimet.edu.ve)$/;
   return regex.test(correo);
 }
-
-
 
 export async function createUserService(data: signUpForm) {
   const supabase = createClient();
@@ -18,7 +16,6 @@ export async function createUserService(data: signUpForm) {
   if (!validarCorreo(data.email)) {
     throw new Error('El correo electrónico debe terminar en @correo.unimet.edu.ve o @unimet.edu.ve');
   }
-
 
   let { data: usuario, error } = await supabase
     .from("Usuario")
