@@ -27,7 +27,6 @@ import useInputFilterTable from "@/lib/hooks/table/useInputFilter-Table";
 import usePaginationTable from "@/lib/hooks/table/usePagination-Table";
 import useSelectColumnsTable from "@/lib/hooks/table/useSelectColumns-Table";
 import DropdownTable from "@/lib/components/table/DropdownTable";
-import Sidebar from "@/app/sidebar";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -162,7 +161,6 @@ export default function App() {
     return (
       <div className="flex flex-col gap-4">
         <section className="flex justify-between gap-3 items-end">
-          <Sidebar />
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
@@ -280,8 +278,7 @@ export default function App() {
   ]);
 
   return (
-   // <div className="flex">
-    //  <Sidebar />
+    <div className="p-16">
       <Table
         aria-label="Example table with custom cells, pagination and sorting"
         isHeaderSticky
@@ -310,7 +307,10 @@ export default function App() {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody emptyContent="No hay estudiantes postulados aún" items={items}>
+        <TableBody
+          emptyContent="No hay estudiantes postulados aún"
+          items={items}
+        >
           {(item) => (
             <TableRow key={item.id}>
               {(columnKey) => (
@@ -320,7 +320,6 @@ export default function App() {
           )}
         </TableBody>
       </Table>
-    //</div>
-    
+    </div>
   );
 }

@@ -4,7 +4,7 @@ import { Control, Controller, FieldValues, Path } from "react-hook-form";
 
 interface SelectItem {
   label: string;
-  key: string;
+  key: string | number;
 }
 
 interface Props<T extends FieldValues> extends Omit<SelectProps, "children"> {
@@ -42,7 +42,9 @@ export default function SelectControl<T extends FieldValues>({
           className={cn("disabled:opacity-50", className)}
         >
           {items.map((item) => (
-            <SelectItem key={item.key}>{item.label}</SelectItem>
+            <SelectItem key={item.key} value={item.key}>
+              {item.label}
+            </SelectItem>
           ))}
         </Select>
       )}

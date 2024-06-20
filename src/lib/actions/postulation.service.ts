@@ -1,15 +1,12 @@
 import { Postulation } from "../models/Postulation";
 import { createClient } from "../utils/supabase/server";
 
-export async function createPostulation({
-  description,
-  grade,
-  id_vacante,
-}: {
-  description: string;
-  grade: number;
-  id_vacante: number;
-}) {
+export async function createPostulation(
+  description: string,
+  grade: number,
+  id_vacante: number,
+  id_student: number
+) {
   const supabase = createClient();
 
   const { data, error } = await supabase
@@ -17,7 +14,7 @@ export async function createPostulation({
     .insert({
       descripcion: description,
       nota: grade,
-      id_estudiante: 20211110120,
+      id_estudiante: id_student,
       id_vacante,
     })
     .select();
@@ -49,15 +46,17 @@ export async function getUserPostulationByVacancyId(id_vacante: number) {
 }
 
 // FIXME - Usar partial
-export async function updatePostulation(id_vacante: number, dataToUpdate: any) {
+export async function updatePostulation(
+  id_vacante: number,
+  dataToUpdate: any,
+  id_student: number
+) {
   const supabase = createClient();
 
-  throw new Error("Not implemented");
-  console.log(dataToUpdate);
   const { data, error } = await supabase
     .from("Postulacion")
     .update(dataToUpdate)
-    .eq("id_estudiante", 20211110120)
+    .eq("id_estudiante", id_student)
     .eq("id_vacante", id_vacante)
     .select();
 

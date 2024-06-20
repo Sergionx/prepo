@@ -2,25 +2,36 @@
 import SubmitButton from "@/lib/components/forms/SubmitButton";
 import InputControl from "@/lib/components/forms/controls/InputControl";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { login } from "./actions";
-import { emptyForm, loginSchema, ILoginForm } from "./schema";
+import { emptyForm, loginSchema } from "./schema";
+import useFormSubmit from "@/lib/hooks/useFormSubmit";
+import { getFormData } from "@/lib/utils/forms";
+import { useRouter } from "next/navigation";
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const { control, formState, handleSubmit } = useForm({
     defaultValues: { ...emptyForm },
     mode: "all",
     resolver: zodResolver(loginSchema),
   });
 
-  const onSubmit: SubmitHandler<ILoginForm> = async (data) => {
-    const formData = new FormData();
-    for (let key in data) {
-      // @ts-ignore
-      formData.append(key, data[key]);
-    }
-    await login(formData);
-  };
+  const { onSubmit } = useFormSubmit({
+    mode: "add",
+    addAction: async (data) => {
+      const formData = getFormData(data);
+      return await login(formData);
+    },
+
+    onSucess: () => {
+      setTimeout(() => {
+        router.push("/");
+      }, 3000);
+    },
+    formState,
+  });
 
   return (
     <form

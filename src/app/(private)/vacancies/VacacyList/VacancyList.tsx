@@ -6,6 +6,7 @@ import VacancyCard from "./VacancyCard";
 import ModalPostulationForm from "./ModalPostulationForm/ModalPostulationForm";
 import { Postulation } from "@/lib/models/Postulation";
 import { createClient } from "@/lib/utils/supabase/client";
+import { useAuth } from "@/app/(private)/AuthContext";
 
 export default function VacancyList({
   vacancies,
@@ -15,6 +16,8 @@ export default function VacancyList({
   const [vacancy, setVacancy] = useState<VacancySubjectName | null>(null);
   const [postulation, setPostulation] = useState<Postulation | null>(null);
 
+  const { user } = useAuth();
+
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
@@ -23,8 +26,10 @@ export default function VacancyList({
             key={vacancy.id}
             vacancy={vacancy}
             setVacancy={async (vacancy) => {
-              const postulation = await getPostulation(vacancy.id);
-              setPostulation(postulation);
+              if (user) {
+                const postulation = await getPostulation(vacancy.id, user.id);
+                setPostulation(postulation);
+              }
 
               setVacancy(vacancy);
             }}
@@ -41,14 +46,14 @@ export default function VacancyList({
   );
 }
 
-async function getPostulation(id_vacante: number) {
+async function getPostulation(id_vacante: number, id_student: number) {
   const supabase = createClient();
 
   const { data, error } = await supabase
     .from("Postulacion")
     .select("*")
     .eq("id_vacante", id_vacante)
-    .eq("id_estudiante", 20211110120);
+    .eq("id_estudiante", id_student);
 
   if (error) throw error;
 
