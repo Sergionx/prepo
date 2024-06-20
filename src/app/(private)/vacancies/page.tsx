@@ -9,6 +9,8 @@ import {
 import Skeleton from "./VacacyList/Skeleton";
 import VacancyListFetch from "./VacacyList/VacancyListFetch";
 
+import Sidebar from '@/app/sidebar';
+
 export default function Homepage() {
   return (
     <>
@@ -37,15 +39,33 @@ export default function Homepage() {
         </Button>
       </header>
 
-      <main className="py-12 px-6">
-        <div className="text-center">
-          <h1 className="text-3xl font-bold mb-6">Bienvenido a Prepo</h1>
+      <Sidebar />
 
-          <Suspense fallback={<Skeleton />}>
-            <VacancyListFetch />
-          </Suspense>
+      <main className="py-12 px-6">
+        <div className="flex-grow px-6">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-6">Bienvenido a Prepo</h1>
+
+            <Suspense fallback={<Skeleton />}>
+              <VacancyListFetch />
+            </Suspense>
+          </div>
         </div>
       </main>
+
+      {/* <main className="py-12 px-6">
+        <Sidebar />
+        <div className="flex-grow px-6">
+          <div className="text-center">
+            <h1 className="text-3xl font-bold mb-6">Bienvenido a Prepo</h1>
+
+            <Suspense fallback={<Skeleton />}>
+              <VacancyListFetch />
+            </Suspense>
+          </div>
+        </div>
+        
+      </main> */}
     </>
   );
 }
