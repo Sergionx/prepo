@@ -1,29 +1,22 @@
-'use server'
+"use server";
 
-import { revalidatePath } from 'next/cache'
-import { redirect } from 'next/navigation'
-
-import { createClient } from '@/lib/utils/supabase/server'
+import { createClient } from "@/lib/utils/supabase/server";
+import { revalidatePath } from "next/cache";
 
 export async function login(formData: FormData) {
-  const supabase = createClient()
+  const supabase = createClient();
 
   // type-casting here for convenience
   // in practice, you should validate your inputs
   const data = {
-    email: formData.get('email') as string,
-    password: formData.get('password') as string,
-  }
-  console.log(data)
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+  };
 
-  const { error} = await supabase.auth.signInWithPassword(data)
+  const { error } = await supabase.auth.signInWithPassword(data);
 
-  if (error) {
-    console.log(error)
-    redirect('/error')
-  }
-
-  revalidatePath('/', 'layout')
-  redirect('/')
+  if (error) throw error;
+  
+  revalidatePath("/");
+  return "Usuario logueado con éxito, volverá a home en 3 segundos";
 }
-

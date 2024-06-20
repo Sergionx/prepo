@@ -7,19 +7,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { signup } from "./action";
 import { emptyForm, signupSchema, signUpForm } from "./schema";
+import { useRouter } from "next/navigation";
+import useFormSubmit from "@/lib/hooks/useFormSubmit";
+import { getFormData } from "@/lib/utils/forms";
 
 const USER_TYPE = {
   TEACHER: {
     name: "Profesor",
-    id: "1",
+    id: 1,
   },
   STUDENT: {
     name: "Estudiante",
-    id: "2",
+    id: 2,
   },
   COORDINATOR: {
     name: "Coordinador",
-    id: "3",
+    id: 3,
   },
 };
 
@@ -29,19 +32,33 @@ const usuarios = [
   { key: USER_TYPE.COORDINATOR.id, label: USER_TYPE.COORDINATOR.name },
 ];
 
+// FIXME - Type deberia ser un numero
 export default function SignUpForm() {
+  const router = useRouter();
+
   const { control, formState, handleSubmit, watch } = useForm({
-    defaultValues: { ...emptyForm },
+    defaultValues: emptyForm,
     mode: "all",
     resolver: zodResolver(signupSchema),
   });
 
-  const onSubmit: SubmitHandler<signUpForm> = async (data) => {
-    await createUserService(data);
-    await signup(data);
-  };
+  const { onSubmit } = useFormSubmit({
+    mode: "add",
+    addAction: async (data) => {
+      const formData = getFormData(data);
 
-  const isCoordinator = watch("type") === USER_TYPE.COORDINATOR.id;
+      return await signup(formData);
+    },
+
+    onSucess: () => {
+      setTimeout(() => {
+        router.push("/");
+      }, 3000);
+    },
+    formState,
+  });
+
+  const isCoordinator = Number(watch("type")) === USER_TYPE.COORDINATOR.id;
   console.log(isCoordinator, watch("type"));
   return (
     <form
@@ -69,8 +86,6 @@ export default function SignUpForm() {
         name="email"
         type="email"
         defaultValue="aaaa@correo.unimet.edu.ve"
-        isInvalid={true}
-        errorMessage="Please enter a valid email"
         className="max-w-xs"
       />
       <InputControl
@@ -78,9 +93,6 @@ export default function SignUpForm() {
         control={control}
         name="password"
         type="password"
-        defaultValue="aaaa@correo.unimet.edu.ve"
-        isInvalid={true}
-        errorMessage="Please enter a valid email"
         className="max-w-xs"
       />
 
@@ -97,7 +109,7 @@ export default function SignUpForm() {
         control={control}
         name="type"
         items={usuarios}
-        className="max-w-xs"
+        className="max-w-xs text-black"
       />
       {isCoordinator && (
         <InputControl
@@ -110,7 +122,8 @@ export default function SignUpForm() {
       )}
 
       <SubmitButton
-        text="Iniciar Sesión"
+        text="Crear cuenta"
+        loadingText="Creando cuenta"
         isLoading={formState.isLoading || formState.isSubmitting}
         className="col-span-2 w-[50%] justify-self-center"
       ></SubmitButton>

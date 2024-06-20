@@ -1,23 +1,30 @@
 "use server";
 
+import { createUserService } from "@/lib/actions/user.service";
 import { createClient } from "@/lib/utils/supabase/server";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
-export async function signup(formData: {email: string, password: string}) {
-  const supabase = createClient()
+export async function signup(formData: FormData) {
+  const supabase = createClient();
 
-  // type-casting here for convenience
-  // in practice, you should validate your inputs
-  
+  const data = {
+    email: formData.get("email") as string,
+    password: formData.get("password") as string,
+    id: formData.get("id") as string,
+    type: Number(formData.get("type")),
+    name: formData.get("name") as string,
+    lastname: formData.get("lastname") as string,
+  };
 
-  const { error } = await supabase.auth.signUp(formData)
+  const { error } = await supabase.auth.signUp({
+    email: data.email,
+    password: data.password,
+  });
 
-  if (error) {
-    console.log(error)
-    redirect('/error')
-  }
+  if (error) throw error;
 
-  revalidatePath('/', 'layout')
-  redirect('/')
+  await createUserService(data);
+  revalidatePath("/");
+  return "Usuario creado con éxito, irá al a login en 3 segundos";
 }
