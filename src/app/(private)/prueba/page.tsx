@@ -27,7 +27,6 @@ import useInputFilterTable from "@/lib/hooks/table/useInputFilter-Table";
 import usePaginationTable from "@/lib/hooks/table/usePagination-Table";
 import useSelectColumnsTable from "@/lib/hooks/table/useSelectColumns-Table";
 import DropdownTable from "@/lib/components/table/DropdownTable";
-import Sidebar from "@/app/sidebar";
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   active: "success",
@@ -162,7 +161,6 @@ export default function App() {
     return (
       <div className="flex flex-col gap-4">
         <section className="flex justify-between gap-3 items-end">
-          <Sidebar />
           <Input
             isClearable
             className="w-full sm:max-w-[44%]"
@@ -280,47 +278,46 @@ export default function App() {
   ]);
 
   return (
-   // <div className="flex">
+    // <div className="flex">
     //  <Sidebar />
-      <Table
-        aria-label="Example table with custom cells, pagination and sorting"
-        isHeaderSticky
-        bottomContent={bottomContent}
-        bottomContentPlacement="outside"
-        classNames={{
-          wrapper: "max-h-[382px]",
-        }}
-        selectedKeys={selectedKeys}
-        selectionMode="multiple"
-        color="danger"
-        sortDescriptor={sortDescriptor}
-        topContent={topContent}
-        topContentPlacement="outside"
-        onSelectionChange={setSelectedKeys}
-        onSortChange={setSortDescriptor}
-      >
-        <TableHeader columns={headerColumns}>
-          {(column) => (
-            <TableColumn
-              key={column.uid}
-              align={column.uid === "actions" ? "center" : "start"}
-              allowsSorting={column.sortable}
-            >
-              {column.name}
-            </TableColumn>
-          )}
-        </TableHeader>
-        <TableBody emptyContent="No hay estudiantes postulados aún" items={items}>
-          {(item) => (
-            <TableRow key={item.id}>
-              {(columnKey) => (
-                <TableCell>{renderCell(item, columnKey)}</TableCell>
-              )}
-            </TableRow>
-          )}
-        </TableBody>
-      </Table>
+    <Table
+      aria-label="Example table with custom cells, pagination and sorting"
+      isHeaderSticky
+      bottomContent={bottomContent}
+      bottomContentPlacement="outside"
+      classNames={{
+        wrapper: "max-h-[382px]",
+      }}
+      selectedKeys={selectedKeys}
+      selectionMode="multiple"
+      color="danger"
+      sortDescriptor={sortDescriptor}
+      topContent={topContent}
+      topContentPlacement="outside"
+      onSelectionChange={setSelectedKeys}
+      onSortChange={setSortDescriptor}
+    >
+      <TableHeader columns={headerColumns}>
+        {(column) => (
+          <TableColumn
+            key={column.uid}
+            align={column.uid === "actions" ? "center" : "start"}
+            allowsSorting={column.sortable}
+          >
+            {column.name}
+          </TableColumn>
+        )}
+      </TableHeader>
+      <TableBody emptyContent="No hay estudiantes postulados aún" items={items}>
+        {(item) => (
+          <TableRow key={item.id}>
+            {(columnKey) => (
+              <TableCell>{renderCell(item, columnKey)}</TableCell>
+            )}
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
     //</div>
-    
   );
 }

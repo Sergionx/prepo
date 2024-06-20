@@ -9,11 +9,7 @@ import {
 import Skeleton from "./VacacyList/Skeleton";
 import VacancyListFetch from "./VacacyList/VacancyListFetch";
 
-import Sidebar from '@/app/sidebar';
-
 export default function Homepage() {
-
-
   return (
     <>
       <header className="text-white py-4 px-6 flex justify-between items-center">
@@ -40,8 +36,6 @@ export default function Homepage() {
           Logout
         </Button>
       </header>
-
-      <Sidebar />
 
       <main className="py-12 px-6">
         <div className="flex-grow px-6">
