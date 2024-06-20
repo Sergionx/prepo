@@ -1,6 +1,7 @@
 import React from "react";
 import { TextAreaProps, Textarea } from "@nextui-org/input";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
+import { cn } from "@/lib/utils/classNames";
 
 interface Props<T extends FieldValues> extends TextAreaProps {
   name: Path<T>;
@@ -12,6 +13,7 @@ export default function TextareaControl<T extends FieldValues>({
   name,
   label,
   control,
+  className,
   ...props
 }: Props<T>) {
   return (
@@ -21,13 +23,14 @@ export default function TextareaControl<T extends FieldValues>({
       render={({ formState, fieldState, field }) => (
         <Textarea
           label={label}
-          disabled={formState.isSubmitting || field.disabled}
           {...props}
           {...field}
+          disabled={formState.isSubmitting || field.disabled || props.disabled}
           isInvalid={
             fieldState.invalid && (formState.isSubmitted || fieldState.isDirty)
           }
           errorMessage={fieldState.error?.message}
+          className={cn("disabled:opacity-50", className)}
         />
       )}
     ></Controller>

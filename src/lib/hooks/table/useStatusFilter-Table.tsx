@@ -34,7 +34,7 @@ export default function useFilterTable<T>({
     }
 
     return filteredUsers;
-  }, [data, statusFilter]);
+  }, [data, statusFilter, keyStatus, statusOptions.length]);
 
   return {
     filteredItems,
