@@ -9,6 +9,7 @@ import InputControl from "@/lib/components/forms/controls/InputControl";
 import TextareaControl from "@/lib/components/forms/controls/TextareaControl";
 import { Postulation } from "@/lib/models/Postulation";
 import { VacancySubjectName } from "@/lib/models/Vacancy";
+import { useAuth } from "@/app/(private)/AuthContext";
 
 interface Props {
   onSucess: () => void;
@@ -31,24 +32,39 @@ export default function PostulationForm({
           }
         : emptyForm,
       mode: "all",
-
       resolver: zodResolver(postulationFormSchema),
     }
   );
 
+  const { user } = useAuth();
+
   const { onSubmit } = useFormSubmit({
     mode: postulation ? "edit" : "add",
     addAction: (data) => {
-      if (!vacancy?.id)
-        return Promise.resolve("No se pudo enviar la postulación");
+      if (!vacancy?.id) throw Error("No se pudo enviar la postulación");
+
+      if (!user?.id) throw Error("No se pudo enviar la postulación");
+
       const formData = getFormData(data);
-      return submitPostulation(formData, vacancy.subject.nombre, vacancy?.id);
+      return submitPostulation(
+        formData,
+        vacancy.subject.nombre,
+        vacancy.id,
+        user.id
+      );
     },
     editAction: (data) => {
-      if (!vacancy?.id)
-        return Promise.resolve("No se pudo enviar la postulación");
+      if (!vacancy?.id) throw Error("No se pudo enviar la postulación");
+
+      if (!user?.id) throw Error("No se pudo enviar la postulación");
+
       const formData = getFormData(data);
-      return editPostulation(formData, vacancy.subject.nombre, vacancy?.id);
+      return editPostulation(
+        formData,
+        vacancy.subject.nombre,
+        vacancy.id,
+        user.id
+      );
     },
     onSucess: () => {
       onSucess();

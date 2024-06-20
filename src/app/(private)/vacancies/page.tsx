@@ -10,6 +10,8 @@ import Skeleton from "./VacacyList/Skeleton";
 import VacancyListFetch from "./VacacyList/VacancyListFetch";
 
 export default function Homepage() {
+
+
   return (
     <>
       <header className="text-white py-4 px-6 flex justify-between items-center">
