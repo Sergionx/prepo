@@ -1,15 +1,12 @@
 import { Postulation } from "../models/Postulation";
 import { createClient } from "../utils/supabase/server";
 
-export async function createPostulation({
-  description,
-  grade,
-  id_vacante,
-}: {
-  description: string;
-  grade: number;
-  id_vacante: number;
-}) {
+export async function createPostulation(
+  description: string,
+  grade: number,
+  id_vacante: number,
+  id_student: number
+) {
   const supabase = createClient();
 
   const { data, error } = await supabase
@@ -17,7 +14,7 @@ export async function createPostulation({
     .insert({
       descripcion: description,
       nota: grade,
-      id_estudiante: 20211110120,
+      id_estudiante: id_student,
       id_vacante,
     })
     .select();
@@ -25,7 +22,7 @@ export async function createPostulation({
   if (error) throw error;
 
   // TODO Typear
-  const postulation = data[0] as Postulation
+  const postulation = data[0] as Postulation;
 
   console.log(postulation);
   return postulation;
@@ -43,7 +40,27 @@ export async function getUserPostulationByVacancyId(id_vacante: number) {
 
   if (error) throw error;
 
-  const postulation = data[0] as Postulation
+  const postulation = data[0] as Postulation;
 
   return postulation;
+}
+
+// FIXME - Usar partial
+export async function updatePostulation(
+  id_vacante: number,
+  dataToUpdate: any,
+  id_student: number
+) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("Postulacion")
+    .update(dataToUpdate)
+    .eq("id_estudiante", id_student)
+    .eq("id_vacante", id_vacante)
+    .select();
+
+  if (error) throw error;
+
+  return data;
 }

@@ -1,6 +1,8 @@
 import { redirect } from "next/navigation";
 
 import { createClient } from "@/lib/utils/supabase/server";
+import { AuthProvider } from "./AuthContext";
+import { getUserByEmail } from "@/lib/actions/user.service";
 
 export default async function PrivateLayoutexport({
   children,
@@ -10,9 +12,13 @@ export default async function PrivateLayoutexport({
   const supabase = createClient();
 
   const { data, error } = await supabase.auth.getUser();
+
+  console.log("user: ", data);
   if (error || !data?.user) {
     redirect("/login");
   }
 
-  return children;
+  const user = await getUserByEmail(data.user.email ?? "");
+
+  return <AuthProvider baseUser={user}>{children}</AuthProvider>;
 }

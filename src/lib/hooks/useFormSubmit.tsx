@@ -10,8 +10,8 @@ import { MessageNoId, useToast } from "@/lib/components/ui/toast";
 
 interface Props<T extends FieldValues> {
   mode: "add" | "edit";
-  addAction?: (data: T) => Promise<string | null>;
-  editAction?: (data: Partial<T>) => Promise<string | null>;
+  addAction?: (data: T) => Promise<string>;
+  editAction?: (data: Partial<T>) => Promise<string>;
   onSucess?: () => void;
   formState: FormState<T>;
 }
@@ -28,17 +28,15 @@ export default function useFormSubmit<T extends FieldValues>({
   const onSubmit: SubmitHandler<T> = async (data) => {
     const message: MessageNoId = {
       title: "¡Éxito!",
-      // variant: "success"
+      variant: "success",
     };
 
-    console.log(
-      "onSubmit",
-      data,
-      formState.isSubmitting,
-      formState.isValid,
-      formState.isDirty,
-      formState.errors
-    );
+    console.log("onSubmit", data, {
+      isSubmitting: formState.isSubmitting,
+      isValid: formState.isValid,
+      isDirty: formState.isDirty,
+      errors: formState.errors,
+    });
 
     if (
       formState.isSubmitting ||
@@ -53,8 +51,7 @@ export default function useFormSubmit<T extends FieldValues>({
         case "add":
           if (addAction) {
             const description = await addAction(data);
-            debugger;
-            // toastOptions.description = description;
+            message.description = description;
           }
 
           break;
@@ -65,7 +62,7 @@ export default function useFormSubmit<T extends FieldValues>({
 
           if (editAction) {
             const description = await editAction(toUpdate);
-            // toastOptions.description = description;
+            message.description = description;
           }
           break;
       }
@@ -75,11 +72,11 @@ export default function useFormSubmit<T extends FieldValues>({
 
       onSucess?.();
     } catch (error: any) {
-      console.log({ error });
+      console.log("ERROR EN SUBMIT", { error });
       showToast({
         title: "¡Error!",
         description: error.message,
-        // variant: "error"
+        variant: "error",
       });
     }
   };

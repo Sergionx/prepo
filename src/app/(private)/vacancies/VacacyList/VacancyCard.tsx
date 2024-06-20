@@ -24,20 +24,20 @@ export default function VacancyCard({ vacancy, setVacancy }: Props) {
         <span
           className={cn(
             "absolute top-2 right-2 rounded-full h-3 w-3",
-            !vacancy.abierto ? "bg-green-500" : "bg-red-500"
+            vacancy.abierto ? "bg-green-500" : "bg-red-500"
           )}
         ></span>
       </CardHeader>
-      {/* <CardBody>
-      </CardBody> */}
-      <Image
-        alt={vacancy.id_materia}
-        className="w-full object-cover rounded-t-lg"
-        src="/facultad_ciencias.jpg"
-        fill
-      />
+      <CardBody>
+        <Image
+          alt={vacancy.id_materia}
+          className="w-full object-cover rounded-t-lg"
+          src="/facultad_ciencias.jpg"
+          fill
+        />
+      </CardBody>
 
-      <CardFooter className="absolute bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
+      <CardFooter className="bg-white/30 bottom-0 border-t-1 border-zinc-100/50 z-10 justify-between">
         <p className="text-gray-500 line-clamp-2">{vacancy.description}</p>
       </CardFooter>
     </Card>

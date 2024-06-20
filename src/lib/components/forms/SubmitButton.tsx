@@ -1,30 +1,34 @@
 "use client";
 
 import { cn } from "@/lib/utils/classNames";
-import { Button } from "@nextui-org/button";
+import { Button, ButtonProps } from "@nextui-org/button";
 import { Spinner } from "@nextui-org/spinner";
 import React from "react";
 
-interface Props {
+interface Props extends Omit<ButtonProps, "chidlren"> {
   text?: string;
   isLoading: boolean;
-  className?: string;
+  loadingText?: string;
 }
 export default function SubmitButton({
   text = "Crear",
   isLoading,
+  loadingText = "Creando...",
   className,
+  disabled,
+  ...props
 }: Props) {
   return (
     <Button
       type="submit"
       color="primary"
       className={cn(className)}
-      disabled={isLoading}
+      disabled={isLoading || disabled}
+      {...props}
     >
       {isLoading && <Spinner color="default" size="sm" />}
 
-      {isLoading ? "Creando..." : text}
+      {isLoading ? loadingText : text}
     </Button>
   );
 }
