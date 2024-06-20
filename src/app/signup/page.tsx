@@ -39,18 +39,17 @@ export default function SignUp() {
     mode: "all",
     resolver: zodResolver(signupSchema),
   });
+  // const handleUserTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
+  //   const value = e.target.value as string;
+  //   setValue("type", value);
+  //   setShowAdditionalInput(value === USER_TYPE.COORDINATOR.id);
+  // };
 
-  const [showAdditionalInput, setShowAdditionalInput] = useState(false);
+  // const [showAdditionalInput, setShowAdditionalInput] = useState(false);
 
   const onSubmit: SubmitHandler<signUpForm> = async (data) => {
     await createUserService(data);
     await signup(data);
-  };
-
-  const handleUserTypeChange = (e: React.ChangeEvent<{ value: unknown }>) => {
-    const value = e.target.value as string;
-    setValue("type", value);
-    setShowAdditionalInput(value === USER_TYPE.STUDENT.id);
   };
 
   return (
@@ -86,7 +85,7 @@ export default function SignUp() {
             className="max-w-xs"
           />
           <InputControl
-            label="type"
+            label="Contraseña"
             control={control}
             name="password"
             type="password"
@@ -112,15 +111,15 @@ export default function SignUp() {
             className="max-w-xs"
             onChange={({ target: { value } }) => setValue("type", value)}
           />
-          {showAdditionalInput && (
+          {/* {showAdditionalInput && (
             <InputControl
               label="Campo adicional"
               control={control}
-              name="type"
+              name="id"
               type="text"
               className="max-w-xs"
-            />
-          )}
+            /> */}
+          {/* )} */}
 
           <SubmitButton
             text="Iniciar Sesión"
