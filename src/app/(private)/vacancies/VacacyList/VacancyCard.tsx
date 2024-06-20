@@ -24,7 +24,7 @@ export default function VacancyCard({ vacancy, setVacancy }: Props) {
         <span
           className={cn(
             "absolute top-2 right-2 rounded-full h-3 w-3",
-            !vacancy.abierto ? "bg-green-500" : "bg-red-500"
+            vacancy.abierto ? "bg-green-500" : "bg-red-500"
           )}
         ></span>
       </CardHeader>

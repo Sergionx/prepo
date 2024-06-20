@@ -10,7 +10,7 @@ const links = [
   { href: "/login", label: "Iniciar Sesion" },
   { href: "/signup", label: "Registrarte" },
   { href: "/prueba", label: "Postulantes" },
-  { href: "/vacancies", label: "Materias" },
+  { href: "/vacancies", label: "Vacantes " },
 ];
 
 export default function Sidebar() {
