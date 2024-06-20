@@ -1,8 +1,7 @@
 import { BackgroundGradientAnimation } from "@/lib/components/ui/background-gradient-animation";
 
 import Image from "next/image";
-import { Children } from "react";
-
+import UnimetImage from "@public/unimet.jpg";
 
 export default function AuthPagesLayout({
   children,
@@ -19,19 +18,19 @@ export default function AuthPagesLayout({
           className="flex flex-col justify-center gap-y-4 
             absolute p-10 h-full w-full z-10"
         >
-         {children}
-
+          {children}
         </main>
       </BackgroundGradientAnimation>
 
       <aside className="w-full lg:basis-1/2 relative h-screen -z-[1] lg:block hidden">
         <Image
-          src="/unimet.jpg"
+          src={UnimetImage}
           alt="unimet"
           priority={true}
           fill
           quality={100}
           sizes="50vw"
+          placeholder="blur"
           className="object-cover mx-lg: brightness-50 "
         />
       </aside>
