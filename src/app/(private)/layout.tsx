@@ -10,9 +10,9 @@ export default async function PrivateLayoutexport({
   const supabase = createClient();
 
   const { data, error } = await supabase.auth.getUser();
-  if (error || !data?.user) {
-    redirect("/login");
-  }
+  // if (error || !data?.user) {
+  //   redirect("/login");
+  // }
 
   return children;
 }
