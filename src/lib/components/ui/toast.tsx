@@ -132,9 +132,10 @@ const Toast = forwardRef<
               {message.title}
             </RadixToast.Title>
 
+            {/* FIXME - No aplica la transición si le max-h es none */}
             <RadixToast.Description
-              className="hover:line-clamp-none hover:max-h-24
-              max-h-[4.5rem] line-clamp-3 transition-height
+              className="hover:line-clamp-none hover:max-h-none
+              max-h-[4.5rem] line-clamp-3 transition-all
               text-slate-300/80"
             >
               {message.description}
