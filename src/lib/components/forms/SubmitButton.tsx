@@ -9,7 +9,6 @@ interface Props extends Omit<ButtonProps, "chidlren"> {
   text?: string;
   isLoading: boolean;
   loadingText?: string;
-
 }
 export default function SubmitButton({
   text = "Crear",
@@ -29,7 +28,7 @@ export default function SubmitButton({
     >
       {isLoading && <Spinner color="default" size="sm" />}
 
-      {isLoading ? "Creando..." : text}
+      {isLoading ? loadingText : text}
     </Button>
   );
 }
