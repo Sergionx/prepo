@@ -1,34 +1,32 @@
 import { useMemo, useState } from "react";
-
-type StringKeys<T> = {
-  [K in keyof T]: T[K] extends string ? K : never;
-}[keyof T];
+import { Path } from "react-hook-form";
 
 interface Props<T> {
   data: T[];
-  inputKeyFilter: StringKeys<T>;
+  inputKeyFilter: Path<T>;
 }
 
-export default function useInputFilter<T>({
-  data,
-  inputKeyFilter,
-}: Props<T>) {
+export default function useInputFilter<T>({ data, inputKeyFilter }: Props<T>) {
   const [inputFilterValue, setInputFilterValue] = useState("");
 
   const hasSearchFilter = Boolean(inputFilterValue);
 
   const filteredItems = useMemo(() => {
-    let filteredUsers = [...data];
+    let filteredData = [...data];
 
     if (hasSearchFilter) {
-      filteredUsers = filteredUsers.filter((item) =>
-        (item[inputKeyFilter] as string)
-          .toLowerCase()
-          .includes(inputFilterValue.toLowerCase())
-      );
+      filteredData = filteredData.filter((item) => {
+        const valueToFilter = getNestedValue(item, inputKeyFilter);
+        return valueToFilter
+          ? valueToFilter
+              .toString()
+              .toLowerCase()
+              .includes(inputFilterValue.toLowerCase())
+          : false;
+      });
     }
 
-    return filteredUsers;
+    return filteredData;
   }, [data, inputFilterValue, hasSearchFilter, inputKeyFilter]);
 
   return {
@@ -36,4 +34,8 @@ export default function useInputFilter<T>({
     inputFilterValue,
     setInputFilterValue,
   };
+}
+
+function getNestedValue(obj: any, path: string) {
+  return path.split(".").reduce((acc, part) => acc && acc[part], obj);
 }
