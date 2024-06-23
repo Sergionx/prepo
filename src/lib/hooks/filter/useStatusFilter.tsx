@@ -13,7 +13,7 @@ interface Props<T> {
   keyStatus: keyof T;
 }
 
-export default function useFilterTable<T>({
+export default function useFilter<T>({
   data,
   statusOptions,
   keyStatus,

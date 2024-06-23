@@ -9,7 +9,7 @@ interface Props<T> {
   inputKeyFilter: StringKeys<T>;
 }
 
-export default function useInputFilterTable<T>({
+export default function useInputFilter<T>({
   data,
   inputKeyFilter,
 }: Props<T>) {

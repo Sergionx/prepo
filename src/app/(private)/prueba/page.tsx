@@ -21,9 +21,9 @@ import {
 import { columns, users, statusOptions } from "./data";
 import { IconBan, IconCheck, IconSearch } from "@tabler/icons-react";
 
-import useFilterTable from "@/lib/hooks/table/useStatusFilter-Table";
+import useFilterTable from "@/lib/hooks/filter/useStatusFilter";
 import useSortingTable from "@/lib/hooks/table/useSorting-Table";
-import useInputFilterTable from "@/lib/hooks/table/useInputFilter-Table";
+import useInputFilterTable from "@/lib/hooks/filter/useInputFilter";
 import usePaginationTable from "@/lib/hooks/table/usePagination-Table";
 import useSelectColumnsTable from "@/lib/hooks/table/useSelectColumns-Table";
 import DropdownTable from "@/lib/components/table/DropdownTable";
