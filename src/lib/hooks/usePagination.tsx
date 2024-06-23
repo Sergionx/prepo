@@ -2,10 +2,14 @@ import React from "react";
 
 interface Props<T> {
   data: T[];
+  defaultRowsPerPage?: number;
 }
 
-export default function usePagination<T>({ data }: Props<T>) {
-  const [rowsPerPage, setRowsPerPage] = React.useState(5);
+export default function usePagination<T>({
+  data,
+  defaultRowsPerPage = 5,
+}: Props<T>) {
+  const [rowsPerPage, setRowsPerPage] = React.useState(defaultRowsPerPage);
   const [page, setPage] = React.useState(1);
 
   const items = React.useMemo(() => {
