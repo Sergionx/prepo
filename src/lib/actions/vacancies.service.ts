@@ -26,7 +26,8 @@ export async function getVacancies_SubjectName(): Promise<
 
   let { data: vacancies, error } = await supabase
     .from("Vacancies")
-    .select("*, subject:Materia(nombre)");
+    .select("*, subject:Materia(nombre)")
+    .filter("abierto", "eq", true);
 
   if (error) {
     throw error;
