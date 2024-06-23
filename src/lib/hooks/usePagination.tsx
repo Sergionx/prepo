@@ -4,7 +4,7 @@ interface Props<T> {
   data: T[];
 }
 
-export default function usePaginationTable<T>({ data }: Props<T>) {
+export default function usePagination<T>({ data }: Props<T>) {
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
   const [page, setPage] = React.useState(1);
 

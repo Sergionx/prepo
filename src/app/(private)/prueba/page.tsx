@@ -24,7 +24,7 @@ import { IconBan, IconCheck, IconSearch } from "@tabler/icons-react";
 import useFilterTable from "@/lib/hooks/filter/useStatusFilter";
 import useSortingTable from "@/lib/hooks/table/useSorting-Table";
 import useInputFilterTable from "@/lib/hooks/filter/useInputFilter";
-import usePaginationTable from "@/lib/hooks/table/usePagination-Table";
+import usePagination from "@/lib/hooks/usePagination";
 import useSelectColumnsTable from "@/lib/hooks/table/useSelectColumns-Table";
 import DropdownTable from "@/lib/components/table/DropdownTable";
 
@@ -65,7 +65,7 @@ export default function App() {
   } = useInputFilterTable({ data: filteredItems, inputKeyFilter: "name" });
 
   const { items, page, rowsPerPage, setRowsPerPage, setPage, pages } =
-    usePaginationTable({
+    usePagination({
       data: inputFilteredItems,
     });
 
@@ -232,7 +232,7 @@ export default function App() {
   const bottomContent = useMemo(() => {
     return (
       <div className="py-2 px-2 flex justify-between items-center">
-        <span className="w-[30%] text-small text-default-400">
+        <span className="w-1/3 text-small text-default-400">
           {selectedKeys === "all"
             ? "All items selected"
             : `${selectedKeys.size} of ${filteredItems.length} selected`}
@@ -246,7 +246,7 @@ export default function App() {
           total={pages}
           onChange={setPage}
         />
-        <div className="hidden sm:flex w-[30%] justify-end gap-2">
+        <div className="hidden sm:flex w-1/3 justify-end gap-2">
           <Button
             isDisabled={pages === 1}
             size="sm"
