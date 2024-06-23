@@ -116,7 +116,7 @@ export default function VacancyList({
           <VacancyCard
             key={vacancy.id}
             vacancy={vacancy}
-            setVacancy={async (vacancy) => {
+            onPress={async (vacancy) => {
               if (user) {
                 const postulation = await getPostulation(vacancy.id, user.id);
                 setPostulation(postulation);

@@ -4,15 +4,15 @@ import Image from "next/image";
 
 interface Props {
   vacancy: VacancySubjectName;
-  setVacancy: (vacancy: VacancySubjectName) => void;
+  onPress: (vacancy: VacancySubjectName) => void;
 }
 
-export default function VacancyCard({ vacancy, setVacancy }: Props) {
+export default function VacancyCard({ vacancy, onPress }: Props) {
   return (
     <Card
       isPressable
       onPress={() => {
-        setVacancy(vacancy);
+        onPress(vacancy);
       }}
       className="h-[300px]"
     >
