@@ -150,7 +150,10 @@ export default function DataTable<T>({
             onClear={() => onClear()}
             onValueChange={onSearchChange}
             {...inputFilter}
-            className={cn("w-[300px]", "sm:w-[400px]", inputFilter.className)}
+            className={cn(
+              "w-full max-w-[300px] disabled:opacity-50",
+              inputFilter.className
+            )}
           />
           <div className="flex gap-3">
             <DropdownTable
@@ -218,7 +221,7 @@ export default function DataTable<T>({
     setStatusFilter,
     setVisibleColumns,
     selectedKeys,
-    selectionButtonDropdownProps
+    selectionButtonDropdownProps,
   ]);
 
   const bottomContent = useMemo(() => {
@@ -276,7 +279,6 @@ export default function DataTable<T>({
       bottomContentPlacement="outside"
       selectedKeys={selectedKeys}
       selectionMode="multiple"
-      color="danger"
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"
