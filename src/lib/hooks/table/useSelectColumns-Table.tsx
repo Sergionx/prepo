@@ -1,13 +1,21 @@
 import { useMemo, useState } from "react";
 import { Selection } from "@nextui-org/react";
-import { columns } from "@/app/(private)/prueba/data";
+
+export interface Column {
+  name: string;
+  uid: string;
+  sortable?: boolean;
+  align?: "start" | "center" | "end";
+}
 
 interface Props {
   initialVisibleColumns: string[];
+  columns: Column[];
 }
 
 export default function useSelectColumnsTable({
   initialVisibleColumns,
+  columns,
 }: Props) {
   const [visibleColumns, setVisibleColumns] = useState<Selection>(
     new Set(initialVisibleColumns)
