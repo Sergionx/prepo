@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from "react";
 
-import { IconSearch } from "@tabler/icons-react";
+import { IconPlus, IconSearch } from "@tabler/icons-react";
 import { Button, Input, Pagination } from "@nextui-org/react";
 
 import { VacancySubjectName } from "@/lib/models/Vacancy";
@@ -15,6 +15,7 @@ import { createClient } from "@/lib/utils/supabase/client";
 import { useAuth } from "@/app/(private)/AuthContext";
 import useInputFilter from "@/lib/hooks/filter/useInputFilter";
 import usePagination from "@/lib/hooks/usePagination";
+import { UserType } from "@/lib/models/User";
 
 export default function VacancyList({
   vacancies,
@@ -36,9 +37,8 @@ export default function VacancyList({
       defaultRowsPerPage: 10,
     });
 
-  console.log(inputFilteredItems);
-
   const { user } = useAuth();
+  const isCoordinator = user?.tipo_usuario === UserType.COORDINATOR;
 
   const onNextPage = useCallback(() => {
     if (page < pages) {
@@ -79,17 +79,30 @@ export default function VacancyList({
 
   return (
     <>
+      {/* TODO - Filtro por departametno */}
       <header className="flex flex-col gap-4 mb-6">
         {/* REVIEW - Considerar convertirlo en un autocomplete */}
-        <Input
-          isClearable
-          className="w-full sm:max-w-[44%]"
-          placeholder="Filtrar por materia..."
-          startContent={<IconSearch />}
-          value={inputFilterValue}
-          onClear={() => onClear()}
-          onValueChange={onSearchChange}
-        />
+        <section className="flex justify-between gap-3">
+          <Input
+            isClearable
+            className="w-full sm:max-w-[44%]"
+            placeholder="Filtrar por materia..."
+            startContent={<IconSearch />}
+            value={inputFilterValue}
+            onClear={() => onClear()}
+            onValueChange={onSearchChange}
+          />
+
+          {isCoordinator && (
+            <Button
+              color="success"
+              className="ml-auto h-auto"
+              startContent={<IconPlus />}
+            >
+              Crear nueva vacante
+            </Button>
+          )}
+        </section>
 
         <section className="flex justify-between items-center">
           <span className="text-default-400 text-small">
