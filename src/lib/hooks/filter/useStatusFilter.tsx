@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Selection } from "@nextui-org/react";
 
-interface StatusOption {
+export interface StatusOption {
   name: string;
   uid: string;
 }
@@ -9,6 +9,7 @@ interface StatusOption {
 interface Props<T> {
   data: T[];
   statusOptions: StatusOption[];
+  defaultStatus?: Selection;
 
   keyStatus: keyof T;
 }
@@ -17,8 +18,9 @@ export default function useFilter<T>({
   data,
   statusOptions,
   keyStatus,
+  defaultStatus = "all",
 }: Props<T>) {
-  const [statusFilter, setStatusFilter] = useState<Selection>("all");
+  const [statusFilter, setStatusFilter] = useState<Selection>(defaultStatus);
 
   const filteredItems = useMemo(() => {
     let filteredUsers = [...data];
