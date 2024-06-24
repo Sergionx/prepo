@@ -1,3 +1,5 @@
+import { BaseUser } from "./User";
+
 export interface Postulation {
   id_estudiante: number;
   id_vacante: number;
@@ -5,4 +7,8 @@ export interface Postulation {
   aceptada: boolean;
   nota: number;
   descripcion: string;
+}
+
+export interface PostulationWithUser extends Postulation {
+  student: BaseUser;
 }
