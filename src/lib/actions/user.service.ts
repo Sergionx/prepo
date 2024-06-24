@@ -26,9 +26,10 @@ export async function createUserService(data: signUpForm) {
       {
         correo: data.email,
         nombre: data.name,
-        tipo_usuario: Number(data.type),
-        password: data.password,
+        //password: data.password,
         id: Number(data.id),
+        id_departamento: Number(data.departamento),
+      
       },
     ]);
 
