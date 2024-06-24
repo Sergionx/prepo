@@ -1,4 +1,4 @@
-import { Postulation } from "../models/Postulation";
+import { Postulation, PostulationWithUser } from "../models/Postulation";
 import { createClient } from "../utils/supabase/server";
 
 export async function createPostulation(
@@ -63,4 +63,19 @@ export async function updatePostulation(
   if (error) throw error;
 
   return data;
+}
+
+// TODO - Hacer join con estudiante ademas de solo usuario
+export async function getPostulationsByVacancyId(id_vacante: number) {
+  await new Promise((resolve) => setTimeout(resolve, 100000));
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("Postulacion")
+    .select("*, student:Usuario(*)")
+    .eq("id_vacante", id_vacante);
+
+  if (error) throw error;
+
+  return data as PostulationWithUser[];
 }
