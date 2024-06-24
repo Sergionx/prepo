@@ -1,5 +1,12 @@
-import { Vacancy, VacancySubjectName } from "@/lib/models/Vacancy";
-import { Card, CardBody, CardFooter, CardHeader, cn } from "@nextui-org/react";
+import { VacancySubjectName } from "@/lib/models/Vacancy";
+import {
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Tooltip,
+  cn,
+} from "@nextui-org/react";
 import Image from "next/image";
 
 interface Props {
@@ -21,12 +28,16 @@ export default function VacancyCard({ vacancy, onPress }: Props) {
           {vacancy.subject.nombre}
         </h3>
 
-        <span
-          className={cn(
-            "absolute top-2 right-2 rounded-full h-3 w-3",
-            vacancy.abierto ? "bg-green-500" : "bg-red-500"
-          )}
-        ></span>
+        <Tooltip
+          content={vacancy.abierto ? "Vacante abierta" : "Vacante cerrada"}
+        >
+          <span
+            className={cn(
+              "absolute top-2 right-2 rounded-full h-3 w-3",
+              vacancy.abierto ? "bg-green-500" : "bg-red-500"
+            )}
+          />
+        </Tooltip>
       </CardHeader>
       <CardBody>
         <Image
