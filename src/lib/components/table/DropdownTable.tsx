@@ -1,4 +1,3 @@
-import { statusOptions } from "@/app/(pages)/(private)/prueba/data";
 import { capitalize } from "@/lib/utils/strings";
 import { Button } from "@nextui-org/button";
 import {
