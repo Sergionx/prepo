@@ -22,6 +22,7 @@ export default function useFilter<T>({
 }: Props<T>) {
   const [statusFilter, setStatusFilter] = useState<Selection>(defaultStatus);
 
+  console.log(statusFilter)
   const filteredItems = useMemo(() => {
     let filteredUsers = [...data];
 
@@ -30,8 +31,15 @@ export default function useFilter<T>({
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filteredUsers = filteredUsers.filter((item) => {
-        const status = item[keyStatus] as string;
-        return statusFilter.has(status);
+        const status = item[keyStatus] as string | boolean;
+
+        if (typeof status === "string") return statusFilter.has(status);
+
+        if (statusFilter.has("true") && status === true) {
+          return true;
+        } else if (statusFilter.has("false") && status === false) {
+          return true;
+        }
       });
     }
 

@@ -27,18 +27,25 @@ import usePagination from "@/lib/hooks/usePagination";
 import useSelectColumnsTable, {
   Column,
 } from "@/lib/hooks/table/useSelectColumns-Table";
-import DropdownTable from "@/lib/components/table/DropdownTable";
+import DropdownTable, {
+  DropdownTableProps,
+} from "@/lib/components/table/DropdownTable";
 import { Path } from "react-hook-form";
 import { cn } from "@/lib/utils/classNames";
 import ButtonDropdown, { ButtonDropdownProps } from "../ui/ButtonDropdown";
 
 export type DataTableType = typeof DataTable;
+type NoHookDropdownTableProps<T> = Omit<
+  T,
+  "selectedKeys" | "onSelectionChange" | "options"
+>;
 
 export interface Props<T> extends Omit<TableProps, "children"> {
   data: T[];
 
   statusOptions: StatusOption[];
   keyStatus: keyof T;
+  defaultStatus?: Selection
 
   inputFilter: InputProps & {
     keyFilter: Path<T>;
@@ -47,6 +54,10 @@ export interface Props<T> extends Omit<TableProps, "children"> {
   selectionButtonDropdownProps: ButtonDropdownProps & {
     onPress: (selectedKeys: Selection) => void;
   };
+  statusDropdownProps: NoHookDropdownTableProps<
+    DropdownTableProps<StatusOption>
+  >;
+  columnsDropdownProps: NoHookDropdownTableProps<DropdownTableProps<Column>>;
 
   initialVisibleColumns: string[];
   columns: Column[];
@@ -57,10 +68,17 @@ export interface Props<T> extends Omit<TableProps, "children"> {
 
 export default function DataTable<T>({
   data,
+
   statusOptions,
   keyStatus,
+  defaultStatus = "all",
+
   inputFilter,
+
   selectionButtonDropdownProps,
+  statusDropdownProps,
+  columnsDropdownProps,
+
   initialVisibleColumns,
   columns,
   emptyContent,
@@ -83,7 +101,7 @@ export default function DataTable<T>({
   // TODO Parametriza mejor en props data tagble
   const { filteredItems, statusFilter, setStatusFilter } = useFilterTable({
     data: sortedItems,
-    defaultStatus: "all",
+    defaultStatus,
     statusOptions,
     keyStatus,
   });
@@ -157,37 +175,20 @@ export default function DataTable<T>({
           />
           <div className="flex gap-3">
             <DropdownTable
-              ariaLabel="Table Status"
-              title="Status"
               selectedKeys={statusFilter}
               onSelectionChange={setStatusFilter}
               options={statusOptions}
+              {...statusDropdownProps}
             />
 
             <DropdownTable
-              ariaLabel="Table Columns"
-              title="Columns"
               selectedKeys={visibleColumns}
               onSelectionChange={setVisibleColumns}
               options={columns}
+              {...columnsDropdownProps}
             />
 
-            <ButtonDropdown
-              // buttonProps={{
-              //   onPress: () =>
-              //     selectionButtonDropdownProps.onPress(selectedKeys),
-              // }}
-              {...selectionButtonDropdownProps}
-            />
-
-            {/* <Button
-              color="danger"
-              startContent={<IconBan />}
-              {...selectionButtonDropdownProps}
-              onPress={() => selectionButtonDropdownProps.onPress(selectedKeys)}
-            >
-              Descalificar seleccionados
-            </Button> */}
+            <ButtonDropdown {...selectionButtonDropdownProps} />
           </div>
         </section>
 
@@ -248,7 +249,7 @@ export default function DataTable<T>({
             variant="flat"
             onPress={onPreviousPage}
           >
-            Previous
+            Anterior
           </Button>
           <Button
             isDisabled={pages === 1}
@@ -256,7 +257,7 @@ export default function DataTable<T>({
             variant="flat"
             onPress={onNextPage}
           >
-            Next
+            Siguiente
           </Button>
         </div>
       </div>
