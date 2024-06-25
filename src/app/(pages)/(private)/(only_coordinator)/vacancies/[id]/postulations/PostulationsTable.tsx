@@ -6,8 +6,6 @@ const DataTable = dynamic(() => import("@/lib/components/table/DataTable"), {
   ssr: false,
 }) as DataTableType;
 
-import { StatusOption } from "@/lib/hooks/filter/useStatusFilter";
-
 import { PostulationWithUser } from "@/lib/models/Postulation";
 import {
   TableRow,
@@ -18,52 +16,15 @@ import {
   User,
 } from "@nextui-org/react";
 import { IconBan, IconCheck, IconEye } from "@tabler/icons-react";
-import { Column } from "@/lib/hooks/table/useSelectColumns-Table";
 import { cn } from "@/lib/utils/classNames";
 import { useState } from "react";
-
-const statusPostulations: StatusOption[] = [
-  { name: "Aceptada", uid: "aceptada" },
-  { name: "Rechazada", uid: "rechazada" },
-];
-const initialVisibleColumns = ["student", "date", "grade", "actions"];
-
-const columns: Column[] = [
-  {
-    name: "Estudiante",
-    uid: "student",
-  },
-  {
-    name: "Estado",
-    uid: "status",
-  },
-  {
-    name: "Nota",
-    uid: "grade",
-    sortable: true,
-    align: "center",
-  },
-  {
-    name: "Fecha",
-    uid: "date",
-    sortable: true,
-  },
-  {
-    name: "Acciones",
-    uid: "actions",
-    align: "center",
-  },
-];
-
-const descriptionsMap = {
-  aceptar: "Acepta varias postulaciones a la vez",
-  rechazar: "Rechaza varias postulaciones a la vez",
-};
-
-const labelsMap = {
-  aceptar: "Aceptar seleccionados",
-  rechazar: "Rechazar seleccionados",
-};
+import {
+  columns,
+  descriptionsMap,
+  initialVisibleColumns,
+  labelsMap,
+  statusPostulations,
+} from "./constants";
 
 export default function PostulationsTable({
   postulations,
@@ -75,8 +36,6 @@ export default function PostulationsTable({
   const mode = Array.from(selectedAction)[0];
   const color = mode === "aceptar" ? "success" : "danger";
 
-  // TODO - separar props de datatable para cada hook
-  // TODO - Crear prop para filtrar por default los estados activo
   return (
     <DataTable
       aria-label="Example table with custom cells, pagination and sorting"
@@ -100,8 +59,21 @@ export default function PostulationsTable({
           startContent: mode === "aceptar" ? <IconCheck /> : <IconBan />,
         },
       }}
+      statusDropdownProps={{
+        title: "Estatus",
+        dropdownMenuProps: {
+          "aria-label": "Table Status",
+        },
+      }}
+      columnsDropdownProps={{
+        title: "Columnas",
+        dropdownMenuProps: {
+          "aria-label": "Table Columns",
+        },
+      }}
       statusOptions={statusPostulations}
       keyStatus="aceptada"
+      defaultStatus={new Set(["true"])}
       initialVisibleColumns={initialVisibleColumns}
       columns={columns}
       classNames={{
@@ -109,17 +81,6 @@ export default function PostulationsTable({
       }}
       color={color}
       emptyContent="No hay estudiantes postulados aún"
-      // topContent={
-      //   <ButtonDropdown
-      //     labelsMap={labelsMap}
-      //     descriptionsMap={descriptionsMap}
-      //     selectedOption={selectedAction}
-      //     setSelectedOption={setSelectedAction}
-      //     buttonGroupProps={{
-      //       color,
-      //     }}
-      //   />
-      // }
     >
       {(postulation) => (
         <TableRow
