@@ -42,7 +42,10 @@ export default function App() {
   const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
 
   const { visibleColumns, setVisibleColumns, headerColumns } =
-    useSelectColumnsTable({ initialVisibleColumns: INITIAL_VISIBLE_COLUMNS });
+    useSelectColumnsTable({
+      initialVisibleColumns: INITIAL_VISIBLE_COLUMNS,
+      columns: columns,
+    });
 
   const { sortedItems, setSortDescriptor, sortDescriptor } = useSortingTable({
     defaultSorting: {

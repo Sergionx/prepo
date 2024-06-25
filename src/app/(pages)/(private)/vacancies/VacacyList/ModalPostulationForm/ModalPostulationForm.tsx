@@ -12,7 +12,7 @@ import {
 
 import { Postulation } from "@/lib/models/Postulation";
 import PostulationForm from "./PostulationForm";
-import { useAuth } from "@/app/(private)/AuthContext";
+import { useAuth } from "@/app/(pages)/(private)/AuthContext";
 import { UserType } from "@/lib/models/User";
 import { useRouter } from "next/navigation";
 

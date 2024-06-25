@@ -6,7 +6,10 @@ export default async function Home() {
   const subjects = await getAllSubjects();
 
   return (
-    <BackgroundGradientAnimation className="flex min-h-screen flex-col items-center justify-center p-24">
+    <BackgroundGradientAnimation
+      containerClassName=""
+      className="flex h-full flex-col items-center justify-center p-24"
+    >
       <main className="z-10">
         <VacantForm subjects={subjects} />
       </main>

@@ -12,7 +12,7 @@ import ModalPostulationForm from "./ModalPostulationForm/ModalPostulationForm";
 import { Postulation } from "@/lib/models/Postulation";
 import { createClient } from "@/lib/utils/supabase/client";
 
-import { useAuth } from "@/app/(private)/AuthContext";
+import { useAuth } from "@/app/(pages)/(private)/AuthContext";
 import useInputFilter from "@/lib/hooks/filter/useInputFilter";
 import usePagination from "@/lib/hooks/usePagination";
 import { UserType } from "@/lib/models/User";

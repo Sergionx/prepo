@@ -3,9 +3,10 @@ import React, { useState } from "react";
 import next from "next";
 import { Icon } from "@tabler/icons-react";
 import Link from "next/link";
-import { SIDENAV_ITEMS } from "../VacantForm/messages/constants";
-import { SideNavItem } from "../VacantForm/messages/types";
+
 import { usePathname } from "next/dist/client/components/navigation";
+import { SIDENAV_ITEMS } from "./messages/constants";
+import { SideNavItem } from "./messages/types";
 
 const Sidebar = () => {
   return (

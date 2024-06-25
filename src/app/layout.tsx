@@ -4,7 +4,6 @@ import "./globals.css";
 
 import { Providers } from "./Providers";
 
-import Sidebar from "./table/sidebar";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -20,11 +19,7 @@ export default function RootLayout({
   return (
     <html lang="es">
       <body className={inter.className}>
-        <Providers>
-          <Sidebar />
-
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );

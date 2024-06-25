@@ -9,7 +9,7 @@ import InputControl from "@/lib/components/forms/controls/InputControl";
 import TextareaControl from "@/lib/components/forms/controls/TextareaControl";
 import { Postulation } from "@/lib/models/Postulation";
 import { VacancySubjectName } from "@/lib/models/Vacancy";
-import { useAuth } from "@/app/(private)/AuthContext";
+import { useAuth } from "@/app/(pages)/(private)/AuthContext";
 
 interface Props {
   onSucess: () => void;
