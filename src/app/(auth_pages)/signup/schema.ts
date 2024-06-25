@@ -7,6 +7,7 @@ export interface signUpForm {
   type: number;
   name: string;
   lastname: string;
+  departamento?: string;
 }
 
 export const signupSchema = z.object({

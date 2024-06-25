@@ -26,6 +26,33 @@ const USER_TYPE = {
   },
 };
 
+const USER_DEPARTMENTS = {
+  INGENIERIA: {
+    name: "Gestión de proyectos y Sistemas",
+    id: 1,
+  },
+  CIENCIAS: {
+    name: "Matemática",
+    id: 2,
+  },
+  HUMANIDADES: {
+    name: "Física",
+    id: 3,
+  },
+};
+
+const departamentos = [
+  {
+    key: USER_DEPARTMENTS.INGENIERIA.id,
+    label: USER_DEPARTMENTS.INGENIERIA.name,
+  },
+  { key: USER_DEPARTMENTS.CIENCIAS.id, label: USER_DEPARTMENTS.CIENCIAS.name },
+  {
+    key: USER_DEPARTMENTS.HUMANIDADES.id,
+    label: USER_DEPARTMENTS.HUMANIDADES.name,
+  },
+];
+
 const usuarios = [
   { key: USER_TYPE.TEACHER.id, label: USER_TYPE.TEACHER.name },
   { key: USER_TYPE.STUDENT.id, label: USER_TYPE.STUDENT.name },
@@ -112,12 +139,12 @@ export default function SignUpForm() {
         className="max-w-xs text-black"
       />
       {isCoordinator && (
-        <InputControl
+        <SelectControl
           label="Campo adicional"
           control={control}
-          name="type"
-          type="text"
-          className="max-w-xs"
+          items={departamentos}
+          name="departamento"
+          className="max-w-xs text-black"
         />
       )}
 
