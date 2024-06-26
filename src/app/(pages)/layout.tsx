@@ -12,7 +12,7 @@ export default function PagesLayout({
       <Sidebar />
 
       <main className="flex-1">
-        <MarginWidthWrapper>{children}</MarginWidthWrapper>
+        {/* <MarginWidthWrapper>{children}</MarginWidthWrapper> */}
       </main>
     </div>
   );
