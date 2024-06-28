@@ -14,6 +14,7 @@ import {
   Chip,
   Tooltip,
   User,
+  Selection,
 } from "@nextui-org/react";
 import { IconBan, IconCheck, IconEye } from "@tabler/icons-react";
 import { cn } from "@/lib/utils/classNames";
@@ -25,16 +26,82 @@ import {
   labelsMap,
   statusPostulations,
 } from "./constants";
+import {
+  markPostulationStatus,
+  markPostulationsStudentStatus,
+} from "@/lib/actions/postulation.service";
+import { useToast } from "@/lib/components/ui/toast";
+import { VacancySubjectName } from "@/lib/models/Vacancy";
 
-export default function PostulationsTable({
-  postulations,
-}: {
+interface Props {
   postulations: PostulationWithUser[];
-}) {
+  vacancy: VacancySubjectName;
+}
+
+export default function PostulationsTable({ postulations, vacancy }: Props) {
   const [selectedAction, setSelectedAction] = useState(new Set(["aceptar"]));
 
-  const mode = Array.from(selectedAction)[0];
+  const { showToast } = useToast();
+
+  const mode = Array.from(selectedAction)[0] as "aceptar" | "rechazar";
   const color = mode === "aceptar" ? "success" : "danger";
+
+  async function markSelectedPostulations(selectedKeys: Selection) {
+    try {
+      const studentsIds: number[] = [];
+      const nameStudents: string[] = [];
+      for (const key of Array.from(selectedKeys)) {
+        const [idString, id_vacante] = (key as string).split("-");
+        const id = Number(idString);
+
+        studentsIds.push(id);
+
+        const postulation = postulations.find(
+          (postulation) => postulation.id_estudiante === id
+        );
+
+        if (!postulation)
+          throw new Error(`Estudiante con carnet ${id} no fue encontrado.`);
+
+        const name = postulation.student.nombre;
+
+        if (mode === "aceptar" && postulation.aceptada) {
+          throw new Error(
+            `El estudiante ${name} ya ha sido aceptado, por favor desmárquelo`
+          );
+        } else if (mode == "rechazar" && postulation.aceptada === false) {
+          throw new Error(
+            `El estudiante ${name} ya ha sido descalaficado, por favor desmárquelo`
+          );
+        }
+
+        nameStudents.push(name);
+      }
+
+      const id_vacante = vacancy.id;
+
+      await markPostulationsStudentStatus(
+        studentsIds,
+        id_vacante,
+        mode === "aceptar" ? true : false
+      );
+
+      showToast({
+        title: "Éxito",
+        description:
+          mode === "aceptar"
+            ? `Se aceptó`
+            : `Se descalificó` + ` a ${nameStudents.join(", ")} exitosamente`,
+        variant: "success",
+      });
+    } catch (error: any) {
+      showToast({
+        title: "Error actualizando",
+        description: error.message,
+        variant: "error",
+      });
+    }
+  }
 
   return (
     <DataTable
@@ -45,9 +112,7 @@ export default function PostulationsTable({
         placeholder: "Buscar estudiante",
       }}
       selectionButtonDropdownProps={{
-        onPress: (selectedKeys) => {
-          console.log(selectedKeys);
-        },
+        onPress: markSelectedPostulations,
         labelsMap,
         descriptionsMap,
         selectedOption: selectedAction,
@@ -73,7 +138,7 @@ export default function PostulationsTable({
       }}
       statusOptions={statusPostulations}
       keyStatus="aceptada"
-      defaultStatus={new Set(["true"])}
+      defaultStatus={new Set(["null"])}
       initialVisibleColumns={initialVisibleColumns}
       columns={columns}
       classNames={{
@@ -93,7 +158,7 @@ export default function PostulationsTable({
                   "text-center"
               )}
             >
-              {renderCell(postulation, columnKey)}
+              {renderCell(postulation, columnKey, showToast)}
             </TableCell>
           )}
         </TableRow>
@@ -102,7 +167,11 @@ export default function PostulationsTable({
   );
 }
 
-const renderCell = (item: PostulationWithUser, columnKey: React.Key) => {
+const renderCell = (
+  item: PostulationWithUser,
+  columnKey: React.Key,
+  showToast: any
+) => {
   switch (columnKey) {
     case "student":
       console.log(item);
@@ -164,7 +233,29 @@ const renderCell = (item: PostulationWithUser, columnKey: React.Key) => {
               isIconOnly
               variant="light"
               color="success"
-              className="text-lg active:opacity-50"
+              isDisabled={item.aceptada === true}
+              className="text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              onPress={async () => {
+                try {
+                  await markPostulationStatus(
+                    item.id_estudiante,
+                    item.id_vacante,
+                    true
+                  );
+
+                  showToast({
+                    title: "Éxito",
+                    description: `Se aceptó a ${item.student.nombre} exitosamente`,
+                    variant: "success",
+                  });
+                } catch (error) {
+                  showToast({
+                    title: "Error",
+                    description: `No se pudo aceptar al estudiante ${item.student.nombre}`,
+                    variant: "error",
+                  });
+                }
+              }}
             >
               <IconCheck />
             </Button>
@@ -178,7 +269,29 @@ const renderCell = (item: PostulationWithUser, columnKey: React.Key) => {
               isIconOnly
               variant="light"
               color="danger"
-              className="text-lg active:opacity-50"
+              isDisabled={item.aceptada === false}
+              className="text-lg disabled:opacity-50 disabled:cursor-not-allowed"
+              onPress={async () => {
+                try {
+                  await markPostulationStatus(
+                    item.id_estudiante,
+                    item.id_vacante,
+                    false
+                  );
+
+                  showToast({
+                    title: "Éxito",
+                    description: `Se descalificó a ${item.student.nombre} exitosamente`,
+                    variant: "success",
+                  });
+                } catch (error) {
+                  showToast({
+                    title: "Error",
+                    description: `No se pudo descalificar al estudiante ${item.student.nombre}`,
+                    variant: "error",
+                  });
+                }
+              }}
             >
               <IconBan />
             </Button>
