@@ -45,7 +45,7 @@ export interface Props<T> extends Omit<TableProps, "children"> {
 
   statusOptions: StatusOption[];
   keyStatus: keyof T;
-  defaultStatus?: Selection
+  defaultStatus?: Selection;
 
   inputFilter: InputProps & {
     keyFilter: Path<T>;
@@ -188,7 +188,19 @@ export default function DataTable<T>({
               {...columnsDropdownProps}
             />
 
-            <ButtonDropdown {...selectionButtonDropdownProps} />
+            <ButtonDropdown
+              {...selectionButtonDropdownProps}
+              buttonProps={{
+                onPress: () => {
+                  selectionButtonDropdownProps.onPress(selectedKeys);
+                },
+                ...selectionButtonDropdownProps.buttonProps,
+              }}
+              buttonGroupProps={{
+                isDisabled: selectedKeys !== "all" && selectedKeys.size === 0,
+                ...selectionButtonDropdownProps.buttonGroupProps,
+              }}
+            />
           </div>
         </section>
 
