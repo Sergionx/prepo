@@ -1,12 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import dynamic from "next/dynamic";
 import type { DataTableType } from "@/lib/components/table/DataTable";
 const DataTable = dynamic(() => import("@/lib/components/table/DataTable"), {
   ssr: false,
 }) as DataTableType;
 
-import { PostulationWithUser } from "@/lib/models/Postulation";
 import {
   TableRow,
   TableCell,
@@ -17,8 +17,7 @@ import {
   Selection,
 } from "@nextui-org/react";
 import { IconBan, IconCheck, IconEye } from "@tabler/icons-react";
-import { cn } from "@/lib/utils/classNames";
-import { useState } from "react";
+
 import {
   columns,
   descriptionsMap,
@@ -26,6 +25,9 @@ import {
   labelsMap,
   statusPostulations,
 } from "./constants";
+
+import { cn } from "@/lib/utils/classNames";
+import { PostulationWithUser } from "@/lib/models/Postulation";
 import {
   markPostulationStatus,
   markPostulationsStudentStatus,
@@ -217,7 +219,7 @@ const renderCell = (
       );
     case "actions":
       return (
-        <div className="flex-row gap-2">
+        <div className="flex flex-row gap-2">
           <Tooltip content={`Ver detalles de ${item.student.nombre}`}>
             <Button
               isIconOnly
