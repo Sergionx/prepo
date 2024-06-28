@@ -52,7 +52,7 @@ export async function getVacancies_SubjectName_ById(vacancyId: number) {
     throw error;
   }
 
-  if (!data) return null;
+  if (!data) throw new Error("Vacante no encontrada");
 
   const vacancy = data[0] as VacancySubjectName;
 
