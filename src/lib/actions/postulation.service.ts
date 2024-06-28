@@ -1,4 +1,5 @@
 "use server";
+import { revalidatePath } from "next/cache";
 import { Postulation, PostulationWithUser } from "../models/Postulation";
 import { createClient } from "../utils/supabase/server";
 
@@ -96,6 +97,7 @@ export async function markPostulationStatus(
 
   if (error) throw error;
 
+  revalidatePath("/vacancies/[id]/postulations");
   return data;
 }
 
@@ -114,6 +116,8 @@ export async function markPostulationsStudentStatus(
     .select();
 
   if (error) throw error;
+
+  revalidatePath("/vacancies/[id]/postulations");
 
   return data;
 }
