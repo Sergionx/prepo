@@ -4,10 +4,13 @@ import { Column } from "@/lib/hooks/table/useSelectColumns-Table";
 export const statusPostulations: StatusOption[] = [
   { name: "Aceptada", uid: "true" },
   { name: "Rechazada", uid: "false" },
+  {
+    name: "Pendiente",
+    uid: "null",
+  },
 ];
 
 export const initialVisibleColumns = ["student", "date", "grade", "actions"];
-
 
 export const columns: Column[] = [
   {
@@ -36,12 +39,10 @@ export const columns: Column[] = [
   },
 ];
 
-
 export const descriptionsMap = {
   aceptar: "Acepta varias postulaciones a la vez",
   rechazar: "Rechaza varias postulaciones a la vez",
 };
-
 
 export const labelsMap = {
   aceptar: "Aceptar seleccionados",
