@@ -4,7 +4,7 @@ export interface Postulation {
   id_estudiante: number;
   id_vacante: number;
   createdAt: string;
-  aceptada: boolean;
+  aceptada: boolean | null;
   nota: number;
   descripcion: string;
 }
