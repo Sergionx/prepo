@@ -34,6 +34,7 @@ import {
 } from "@/lib/actions/postulation.service";
 import { useToast } from "@/lib/components/ui/toast";
 import { VacancySubjectName } from "@/lib/models/Vacancy";
+import ModalPostulation from "../modal/ModalPostulation";
 
 interface Props {
   postulations: PostulationWithUser[];
@@ -41,6 +42,8 @@ interface Props {
 }
 
 export default function PostulationsTable({ postulations, vacancy }: Props) {
+  const [postulationModal, setPostulationModal] =
+    useState<PostulationWithUser | null>(null);
   const [selectedAction, setSelectedAction] = useState(new Set(["aceptar"]));
 
   const { showToast } = useToast();
@@ -105,78 +108,125 @@ export default function PostulationsTable({ postulations, vacancy }: Props) {
     }
   }
 
+  async function markPostulation(
+    postulation: PostulationWithUser,
+    mode: boolean
+  ) {
+    try {
+      await markPostulationStatus(
+        postulation.id_estudiante,
+        postulation.id_vacante,
+        mode
+      );
+
+      const description = mode
+        ? `Se aceptó a ${postulation.student.nombre} exitosamente`
+        : `Se descalificó a ${postulation.student.nombre} exitosamente`;
+
+      showToast({
+        title: "Éxito",
+        description,
+        variant: "success",
+      });
+    } catch (error) {
+      const description = mode
+        ? `No se pudo aceptar al estudiante ${postulation.student.nombre}`
+        : `No se pudo descalificar al estudiante ${postulation.student.nombre}`;
+
+      showToast({
+        title: "Error",
+        description,
+        variant: "error",
+      });
+    }
+  }
+
   return (
-    <DataTable
-      aria-label="Example table with custom cells, pagination and sorting"
-      data={postulations}
-      inputFilter={{
-        keyFilter: "student.nombre",
-        placeholder: "Buscar estudiante",
-      }}
-      selectionButtonDropdownProps={{
-        onPress: markSelectedPostulations,
-        labelsMap,
-        descriptionsMap,
-        selectedOption: selectedAction,
-        setSelectedOption: setSelectedAction,
-        buttonGroupProps: {
-          color,
-        },
-        buttonProps: {
-          startContent: mode === "aceptar" ? <IconCheck /> : <IconBan />,
-        },
-      }}
-      statusDropdownProps={{
-        title: "Estatus",
-        dropdownMenuProps: {
-          "aria-label": "Table Status",
-        },
-      }}
-      columnsDropdownProps={{
-        title: "Columnas",
-        dropdownMenuProps: {
-          "aria-label": "Table Columns",
-        },
-      }}
-      statusOptions={statusPostulations}
-      keyStatus="aceptada"
-      defaultStatus={new Set(["null"])}
-      initialVisibleColumns={initialVisibleColumns}
-      columns={columns}
-      classNames={{
-        wrapper: "max-h-[382px]",
-      }}
-      color={color}
-      emptyContent="No hay estudiantes postulados aún"
-    >
-      {(postulation) => (
-        <TableRow
-          key={`${postulation.id_estudiante}-${postulation.id_vacante}`}
-        >
-          {(columnKey) => (
-            <TableCell
-              className={cn(
-                ["grade", "actions"].includes(columnKey as string) &&
-                  "text-center"
-              )}
-            >
-              {renderCell(postulation, columnKey, showToast)}
-            </TableCell>
-          )}
-        </TableRow>
-      )}
-    </DataTable>
+    <>
+      <DataTable
+        aria-label="Example table with custom cells, pagination and sorting"
+        data={postulations}
+        inputFilter={{
+          keyFilter: "student.nombre",
+          placeholder: "Buscar estudiante",
+        }}
+        selectionButtonDropdownProps={{
+          onPress: markSelectedPostulations,
+          labelsMap,
+          descriptionsMap,
+          selectedOption: selectedAction,
+          setSelectedOption: setSelectedAction,
+          buttonGroupProps: {
+            color,
+          },
+          buttonProps: {
+            startContent: mode === "aceptar" ? <IconCheck /> : <IconBan />,
+          },
+        }}
+        statusDropdownProps={{
+          title: "Estatus",
+          dropdownMenuProps: {
+            "aria-label": "Table Status",
+          },
+        }}
+        columnsDropdownProps={{
+          title: "Columnas",
+          dropdownMenuProps: {
+            "aria-label": "Table Columns",
+          },
+        }}
+        statusOptions={statusPostulations}
+        keyStatus="aceptada"
+        defaultStatus={new Set(["null"])}
+        initialVisibleColumns={initialVisibleColumns}
+        columns={columns}
+        classNames={{
+          wrapper: "max-h-[382px]",
+        }}
+        color={color}
+        emptyContent="No hay estudiantes postulados aún"
+      >
+        {(postulation) => (
+          <TableRow
+            key={`${postulation.id_estudiante}-${postulation.id_vacante}`}
+          >
+            {(columnKey) => (
+              <TableCell
+                className={cn(
+                  ["grade", "actions"].includes(columnKey as string) &&
+                    "text-center"
+                )}
+              >
+                {renderCell(
+                  postulation,
+                  columnKey,
+                  setPostulationModal,
+                  markPostulation
+                )}
+              </TableCell>
+            )}
+          </TableRow>
+        )}
+      </DataTable>
+
+      <ModalPostulation
+        vacancy={vacancy}
+        postulation={postulationModal}
+        onClose={() => setPostulationModal(null)}
+        markPostulation={markPostulation}
+      />
+    </>
   );
 }
 
 const renderCell = (
   item: PostulationWithUser,
   columnKey: React.Key,
-  showToast: any
+  setPostulationModal: (postulation: PostulationWithUser) => void,
+  markPostulation: (postulation: PostulationWithUser, mode: boolean) => void
 ) => {
   switch (columnKey) {
     case "student":
-      console.log(item);
       return (
         <User
           avatarProps={{
@@ -219,12 +269,13 @@ const renderCell = (
       );
     case "actions":
       return (
-        <div className="flex flex-row gap-2">
+        <div className="flex flex-row justify-center gap-2">
           <Tooltip content={`Ver detalles de ${item.student.nombre}`}>
             <Button
               isIconOnly
               variant="light"
               className="text-lg active:opacity-50"
+              onClick={() => setPostulationModal(item)}
             >
               <IconEye />
             </Button>
@@ -237,27 +288,7 @@ const renderCell = (
               color="success"
               isDisabled={item.aceptada === true}
               className="text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              onPress={async () => {
-                try {
-                  await markPostulationStatus(
-                    item.id_estudiante,
-                    item.id_vacante,
-                    true
-                  );
-
-                  showToast({
-                    title: "Éxito",
-                    description: `Se aceptó a ${item.student.nombre} exitosamente`,
-                    variant: "success",
-                  });
-                } catch (error) {
-                  showToast({
-                    title: "Error",
-                    description: `No se pudo aceptar al estudiante ${item.student.nombre}`,
-                    variant: "error",
-                  });
-                }
-              }}
+              onPress={() => markPostulation(item, true)}
             >
               <IconCheck />
             </Button>
@@ -273,27 +304,7 @@ const renderCell = (
               color="danger"
               isDisabled={item.aceptada === false}
               className="text-lg disabled:opacity-50 disabled:cursor-not-allowed"
-              onPress={async () => {
-                try {
-                  await markPostulationStatus(
-                    item.id_estudiante,
-                    item.id_vacante,
-                    false
-                  );
-
-                  showToast({
-                    title: "Éxito",
-                    description: `Se descalificó a ${item.student.nombre} exitosamente`,
-                    variant: "success",
-                  });
-                } catch (error) {
-                  showToast({
-                    title: "Error",
-                    description: `No se pudo descalificar al estudiante ${item.student.nombre}`,
-                    variant: "error",
-                  });
-                }
-              }}
+              onPress={() => markPostulation(item, false)}
             >
               <IconBan />
             </Button>
