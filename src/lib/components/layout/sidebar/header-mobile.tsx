@@ -6,8 +6,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { motion, useCycle } from "framer-motion";
-import { SIDENAV_ITEMS } from "../VacantForm/messages/constants";
-import { SideNavItem } from "../VacantForm/messages/types";
+import { SIDENAV_ITEMS } from "./messages/constants";
+import { SideNavItem } from "./messages/types";
 
 type MenuItemWithSubMenuProps = {
   item: SideNavItem;
