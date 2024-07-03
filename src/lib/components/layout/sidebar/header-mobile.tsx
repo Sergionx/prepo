@@ -6,8 +6,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { motion, useCycle } from "framer-motion";
-import { SIDENAV_ITEMS } from "./messages/constants";
 import { SideNavItem } from "./messages/types";
+import { SIDENAV_ITEMS } from "./messages/constants";
+import { IconChevronDown } from "@tabler/icons-react";
 
 type MenuItemWithSubMenuProps = {
   item: SideNavItem;
@@ -55,7 +56,7 @@ const HeaderMobile = () => {
       />
       <motion.ul
         variants={variants}
-        className="absolute grid w-full gap-3 px-10 py-16"
+        className="absolute grid w-full gap-3 px-10 py-16 max-h-screen overflow-y-auto"
       >
         {SIDENAV_ITEMS.map((item, idx) => {
           const isLastItem = idx === SIDENAV_ITEMS.length - 1; // Check if it's the last item
@@ -167,7 +168,7 @@ const MenuItemWithSubMenu: React.FC<MenuItemWithSubMenuProps> = ({
               {item.title}
             </span>
             <div className={`${subMenuOpen && "rotate-180"}`}>
-              {/* <Icon name="Chevron Abajo" width="24" height="24" /> */}
+              <IconChevronDown width="24" height="24" />
             </div>
           </div>
         </button>
