@@ -6,6 +6,7 @@ import {
   DropdownMenu,
   DropdownItem,
   Selection,
+  DropdownMenuProps,
 } from "@nextui-org/react";
 import { IconChevronDown } from "@tabler/icons-react";
 import React from "react";
@@ -15,24 +16,25 @@ interface Option {
   uid: string;
 }
 
-interface Props<T extends Option> {
+export interface DropdownTableProps<T extends Option> {
   title: string;
-  ariaLabel: string;
 
   selectionMode?: "single" | "multiple";
   selectedKeys: Selection;
   onSelectionChange: (keys: Selection) => void;
   options: T[];
+
+  dropdownMenuProps: Omit<DropdownMenuProps, "children">;
 }
 
 export default function DropdownTable<T extends Option>({
   title,
-  ariaLabel,
   selectionMode = "multiple",
   selectedKeys,
   onSelectionChange,
   options,
-}: Props<T>) {
+  dropdownMenuProps,
+}: DropdownTableProps<T>) {
   return (
     <Dropdown>
       <DropdownTrigger className="hidden sm:flex">
@@ -45,11 +47,11 @@ export default function DropdownTable<T extends Option>({
       </DropdownTrigger>
       <DropdownMenu
         disallowEmptySelection
-        aria-label={ariaLabel}
         closeOnSelect={selectionMode === "single"}
         selectedKeys={selectedKeys}
         selectionMode={selectionMode}
         onSelectionChange={onSelectionChange}
+        {...dropdownMenuProps}
       >
         {options.map((status) => (
           <DropdownItem key={status.uid} className="capitalize">

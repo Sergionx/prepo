@@ -175,7 +175,9 @@ export default function App() {
           />
           <div className="flex gap-3">
             <DropdownTable
-              ariaLabel="Table Status"
+              dropdownMenuProps={{
+                "aria-label": "Table Status",
+              }}
               title="Status"
               selectedKeys={statusFilter}
               onSelectionChange={setStatusFilter}
@@ -183,7 +185,9 @@ export default function App() {
             />
 
             <DropdownTable
-              ariaLabel="Table Columns"
+              dropdownMenuProps={{
+                "aria-label": "Table Columns",
+              }}
               title="Columns"
               selectedKeys={visibleColumns}
               onSelectionChange={setVisibleColumns}
@@ -271,7 +275,6 @@ export default function App() {
     );
   }, [
     selectedKeys,
-    items.length,
     page,
     pages,
     onNextPage,

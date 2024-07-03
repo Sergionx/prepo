@@ -30,8 +30,17 @@ export default function useFilter<T>({
       Array.from(statusFilter).length !== statusOptions.length
     ) {
       filteredUsers = filteredUsers.filter((item) => {
-        const status = item[keyStatus] as string;
-        return statusFilter.has(status);
+        const status = item[keyStatus] as string | boolean | null;
+
+        if (status === null) return statusFilter.has("null");
+
+        if (typeof status === "string") return statusFilter.has(status);
+
+        if (statusFilter.has("true") && status === true) {
+          return true;
+        } else if (statusFilter.has("false") && status === false) {
+          return true;
+        }
       });
     }
 

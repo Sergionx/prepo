@@ -8,7 +8,7 @@ import { usePathname } from "next/navigation";
 import { motion, useCycle } from "framer-motion";
 import { SideNavItem } from "./messages/types";
 import { SIDENAV_ITEMS } from "./messages/constants";
-import { Icon } from "@iconify/react";
+import { IconChevronDown } from "@tabler/icons-react";
 
 type MenuItemWithSubMenuProps = {
   item: SideNavItem;
@@ -168,7 +168,7 @@ const MenuItemWithSubMenu: React.FC<MenuItemWithSubMenuProps> = ({
               {item.title}
             </span>
             <div className={`${subMenuOpen && "rotate-180"}`}>
-              <Icon icon="lucide:chevron-down" width="24" height="24" />
+              <IconChevronDown width="24" height="24" />
             </div>
           </div>
         </button>
