@@ -11,7 +11,13 @@ export interface signUpForm {
 }
 
 export const signupSchema = z.object({
-  email: z.string().email(),
+  email: z
+    .string()
+    .email("El correo electrónico debe ser un correo electrónico válido")
+    .regex(
+      /^[a-zA-Z0-9._%+-]+@(?:correo.unimet.edu.ve|unimet.edu.ve)$/,
+      "El correo electrónico debe terminar en @correo.unimet.edu.ve o @unimet.edu.ve"
+    ),
   password: z.string().min(6),
   id: z
     .string()
