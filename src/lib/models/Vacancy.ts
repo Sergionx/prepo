@@ -5,7 +5,7 @@ export interface Vacancy {
   abierto: boolean;
   id_materia: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
 }
 
 export interface VacancySubjectName extends Vacancy {
