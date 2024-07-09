@@ -124,7 +124,7 @@ export default function SignUpForm() {
       />
 
       <InputControl
-        label="Carnet o cedula"
+        label="Carnet"
         control={control}
         name="id"
         type="id"
