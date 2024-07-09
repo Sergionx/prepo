@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname } from "next/dist/client/components/navigation";
 import { SIDENAV_ITEMS } from "./messages/constants";
 import { SideNavItem } from "./messages/types";
+import { Button } from "@nextui-org/button";
 
 const Sidebar = () => {
   return (
@@ -21,25 +22,37 @@ const Sidebar = () => {
           <span className="font-bold text-2xl hidden md:flex">Prepo</span>
         </Link>
 
-        <div className="flex flex-col space-y-2  md:px-6 ">
+        <div className="flex flex-col space-y-2 px-3 md:px-6 ">
           {SIDENAV_ITEMS.map((item, idx) => {
             return <MenuItem key={idx} item={item} />;
           })}
         </div>
 
         <div className="flex flex-col mt-auto p-4  md:w-60 ">
-          <Link href="/login">
-            {/* <IconLogin2 className="flex flex-col" width="28" height="28" /> */}
-            <span className="flex flex-row font-semibold  text-xl rounded-lg text-center bg-slate-300  hover:bg-zinc-100 my-2 p-2 justify-center">
-              Inicio de Sesión
-            </span>
-          </Link>
-          <Link href="/signup">
-            {/* <IconClipboard width="24" height="24" /> */}
-            <span className="flex font-semibold text-xl rounded-lg  bg-slate-300  hover:bg-zinc-100 my-2 p-2 justify-center">
+          <Button
+            color="primary"
+            variant="flat"
+            className="flex my-2 p-2 justify-center "
+            size="lg"
+            href="/login"
+            onClick={() => (window.location.href = "/login")}
+          >
+            Iniciar Sesión
+          </Button>
+
+          <Button
+            color="primary"
+            variant="flat"
+            className="flex my-2 p-2 justify-center "
+            size="lg"
+            onClick={() => (window.location.href = "/signup")}
+          >
+            Registrarse
+          </Button>
+
+          {/* <span className="flex font-semibold text-xl rounded-lg  bg-slate-300  hover:bg-zinc-100 my-2 p-2 justify-center">
               Registro
-            </span>
-          </Link>
+            </span> */}
         </div>
       </div>
     </div>
