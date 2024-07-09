@@ -1,3 +1,5 @@
+"use server";
+import { revalidatePath } from "next/cache";
 import { Postulation, PostulationWithUser } from "../models/Postulation";
 import { createClient } from "../utils/supabase/server";
 
@@ -67,7 +69,6 @@ export async function updatePostulation(
 
 // TODO - Hacer join con estudiante ademas de solo usuario
 export async function getPostulationsByVacancyId(id_vacante: number) {
-  await new Promise((resolve) => setTimeout(resolve, 100000));
   const supabase = createClient();
 
   const { data, error } = await supabase
@@ -78,4 +79,45 @@ export async function getPostulationsByVacancyId(id_vacante: number) {
   if (error) throw error;
 
   return data as PostulationWithUser[];
+}
+
+export async function markPostulationStatus(
+  id_estudiante: number,
+  id_vacante: number,
+  status: boolean
+) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("Postulacion")
+    .update({ aceptada: status })
+    .eq("id_estudiante", id_estudiante)
+    .eq("id_vacante", id_vacante)
+    .select();
+
+  if (error) throw error;
+
+  revalidatePath("/vacancies/[id]/postulations");
+  return data;
+}
+
+export async function markPostulationsStudentStatus(
+  id_estudiantes: number[],
+  id_vacante: number,
+  status: boolean
+) {
+  const supabase = createClient();
+
+  const { data, error } = await supabase
+    .from("Postulacion")
+    .update({ aceptada: status })
+    .in("id_estudiante", id_estudiantes)
+    .eq("id_vacante", id_vacante)
+    .select();
+
+  if (error) throw error;
+
+  revalidatePath("/vacancies/[id]/postulations");
+
+  return data;
 }

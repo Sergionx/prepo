@@ -37,7 +37,6 @@ export default function ButtonDropdown({
 }: ButtonDropdownProps) {
   const selectedOptionValue = Array.from(selectedOption)[0];
 
-  console.log({ selectedOptionValue });
   return (
     <ButtonGroup {...buttonGroupProps}>
       <Button {...buttonProps}>{labelsMap[selectedOptionValue]}</Button>

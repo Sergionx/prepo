@@ -27,7 +27,7 @@ export default function useSelectColumnsTable({
     return columns.filter((column) =>
       Array.from(visibleColumns).includes(column.uid)
     );
-  }, [visibleColumns]);
+  }, [visibleColumns, columns]);
 
   return {
     visibleColumns,

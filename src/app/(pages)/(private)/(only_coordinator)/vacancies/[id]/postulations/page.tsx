@@ -1,6 +1,7 @@
 import { getPostulationsByVacancyId } from "@/lib/actions/postulation.service";
 
 import PostulationsTable from "./PostulationsTable";
+import { getVacancies_SubjectName_ById } from "@/lib/actions/vacancies.service";
 
 interface Props {
   params: { id: string };
@@ -8,12 +9,22 @@ interface Props {
 
 export default async function Postulations({ params: { id } }: Props) {
   try {
-    const postulations = await getPostulationsByVacancyId(parseInt(id));
+    const numberId = parseInt(id);
 
-    console.log(postulations);
+    const [postulations, vacancy] = await Promise.all([
+      getPostulationsByVacancyId(numberId),
+      getVacancies_SubjectName_ById(numberId),
+    ]);
+    console.log;
+
     return (
       <div className="p-16">
-        <PostulationsTable postulations={postulations} />
+        <h1 className="text-2xl font-bold mb-2">Postulaciones</h1>
+        <h2 className="text-xl font-semibold mb-2">{vacancy.subject.nombre}</h2>
+
+        <p className="text-lg mb-6">{vacancy.description}</p>
+
+        <PostulationsTable postulations={postulations} vacancy={vacancy} />
       </div>
     );
   } catch (error) {

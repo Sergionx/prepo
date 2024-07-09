@@ -1,17 +1,22 @@
-import { Icon } from "@iconify/react";
-
+import {
+  IconFolder,
+  IconHelpCircle,
+  IconHome,
+  IconMail,
+  IconSettings,
+} from "@tabler/icons-react";
 import { SideNavItem } from "./types";
 
 export const SIDENAV_ITEMS: SideNavItem[] = [
   {
     title: "Home",
     path: "/",
-    icon: <Icon icon="lucide:home" width="24" height="24" />,
+    icon: <IconHome width="24" height="24" />,
   },
   {
     title: "Vacantes",
     path: "./vacancies",
-    icon: <Icon icon="lucide:folder" width="24" height="24" />,
+    icon: <IconFolder width="24" height="24" />,
     //submenu: true,
     // subMenuItems: [
     //   { title: "All", path: "/projects" },
@@ -21,24 +26,29 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   },
 
   {
-    title: "Preparador",
-    path: "/preparer",
-    icon: <Icon icon="lucide:settings" width="24" height="24" />,
-    // submenu: true,
-    // subMenuItems: [
-    //   { title: "Account", path: "/settings/account" },
-    //   { title: "Privacy", path: "/settings/privacy" },
-    // ],
+    title: "Messages",
+    path: "/messages",
+    icon: <IconMail width="24" height="24" />,
+  },
+  {
+    title: "Settings",
+    path: "/settings",
+    icon: <IconSettings width="24" height="24" />,
+    submenu: true,
+    subMenuItems: [
+      { title: "Account", path: "/settings/account" },
+      { title: "Privacy", path: "/settings/privacy" },
+    ],
   },
   {
     title: "Inicio Sesión",
     path: "/login",
-    icon: <Icon icon="lucide:login" width="24" height="24" />,
+    icon: <IconHelpCircle width="24" height="24" />,
   },
 
   {
     title: "Registarse",
     path: "/signup",
-    icon: <Icon icon="lucide:signup" width="24" height="24" />,
+    icon: <IconHelpCircle width="24" height="24" />,
   },
 ];
