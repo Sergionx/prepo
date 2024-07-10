@@ -27,11 +27,6 @@ export default function ModalPostulationForm({
   postulation,
   onClose,
 }: Props) {
-  const router = useRouter();
-
-  const { user } = useAuth();
-  const isCoordinator = user?.tipo_usuario === UserType.COORDINATOR;
-
   const { postulationForm, formState } = PostulationForm({
     onSucess: onClose,
     postulation: postulation,
@@ -71,20 +66,6 @@ export default function ModalPostulationForm({
             <Button color="danger" variant="light" onPress={onClose}>
               Close
             </Button>
-
-            {true && (
-              <Button
-                variant="bordered"
-                color="secondary"
-                onPress={() => {
-                  if (!true) return;
-
-                  router.push(`/vacancies/${vacancy.id}/postulations`);
-                }}
-              >
-                Ver postulantes
-              </Button>
-            )}
 
             <SubmitButton
               form="postulation"
