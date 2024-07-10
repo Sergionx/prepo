@@ -8,7 +8,7 @@ const CustomDataTable = dynamic(
   }
 ) as CustomDataTableType;
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { markPostulationStatus } from "@/lib/actions/postulation.service";
 import { useToast } from "@/lib/components/ui/toast";
 import { PostulationWithUser } from "@/lib/models/Postulation";
@@ -22,61 +22,33 @@ import {
   Tooltip,
   Input,
   Pagination,
+  useDisclosure,
 } from "@nextui-org/react";
 import { IconEye, IconTrash, IconSearch } from "@tabler/icons-react";
-import {
-  statusPostulations,
-  initialVisibleColumns,
-  columns,
-} from "./constants";
+import { statusVacancies, initialVisibleColumns, columns } from "./constants";
 import DropdownTable from "@/lib/components/table/DropdownTable";
+import { Subject } from "@/lib/models/Subject";
+import ModalVacantForm from "./ModalVacantForm/ModalVacantForm";
 
 interface Props {
   vacancies: VacancySubjectName[];
+  subjects: Subject[];
 }
 
-export default function VacanciesTable({ vacancies }: Props) {
-  const [postulationModal, setPostulationModal] =
-    useState<PostulationWithUser | null>(null);
+export default function VacanciesTable({ vacancies, subjects }: Props) {
+  const [vacantModal, setVacantModal] = useState<VacancySubjectName | null>(
+    null
+  );
 
-  // const [selectedKeys, setSelectedKeys] = useState<Selection>(new Set([]));
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+
+  useEffect(() => {
+    if (vacantModal) {
+      onOpen();
+    }
+  }, [vacantModal]);
 
   const { showToast } = useToast();
-
-  async function markPostulation(
-    postulation: PostulationWithUser,
-    mode: boolean
-  ) {
-    try {
-      await markPostulationStatus(
-        postulation.id_estudiante,
-        postulation.id_vacante,
-        mode
-      );
-
-      const description = mode
-        ? `Se aceptó a ${postulation.student.nombre} exitosamente`
-        : `Se descalificó a ${postulation.student.nombre} exitosamente`;
-
-      showToast({
-        title: "Éxito",
-        description,
-        variant: "success",
-      });
-    } catch (error) {
-      const description = mode
-        ? `No se pudo aceptar al estudiante ${postulation.student.nombre}`
-        : `No se pudo descalificar al estudiante ${postulation.student.nombre}`;
-
-      showToast({
-        title: "Error",
-        description,
-        variant: "error",
-      });
-    }
-  }
-
-  console.log(vacancies);
 
   return (
     <>
@@ -92,7 +64,7 @@ export default function VacanciesTable({ vacancies }: Props) {
         inputFilter={{
           keyFilter: "subject.nombre",
         }}
-        statusOptions={statusPostulations}
+        statusOptions={statusVacancies}
         keyStatus="abierto"
         defaultStatus={new Set(["true"])}
         initialVisibleColumns={initialVisibleColumns}
@@ -118,16 +90,17 @@ export default function VacanciesTable({ vacancies }: Props) {
                 isClearable
                 startContent={<IconSearch />}
                 value={inputFilterValue}
-                onClear={() => onClear()}
+                onClear={onClear}
                 onValueChange={onSearchChange}
                 placeholder="Buscar Materia"
                 className="w-full max-w-[300px] disabled:opacity-50"
               />
+
               <div className="flex gap-3">
                 <DropdownTable
                   selectedKeys={statusFilter}
                   onSelectionChange={setStatusFilter}
-                  options={statusPostulations}
+                  options={statusVacancies}
                   title="Estatus"
                   dropdownMenuProps={{
                     "aria-label": "Table Status",
@@ -144,7 +117,7 @@ export default function VacanciesTable({ vacancies }: Props) {
                   }}
                 />
 
-                <Button color="secondary" variant="solid">
+                <Button color="secondary" variant="solid" onPress={onOpen}>
                   Crear Vacante
                 </Button>
               </div>
@@ -220,24 +193,21 @@ export default function VacanciesTable({ vacancies }: Props) {
                   ].includes(columnKey as string) && "text-center"
                 )}
               >
-                {renderCell(
-                  vacancy,
-                  columnKey,
-                  setPostulationModal,
-                  markPostulation
-                )}
+                {renderCell(vacancy, columnKey, setVacantModal)}
               </TableCell>
             )}
           </TableRow>
         )}
       </CustomDataTable>
 
-      {/* <ModalPostulation
-        vacancy={vacancies}
-        postulation={postulationModal}
-        onClose={() => setPostulationModal(null)}
-        markPostulation={markPostulation}
-      /> */}
+      <ModalVacantForm
+        vacancy={vacantModal}
+        subjects={subjects}
+        isOpen={isOpen}
+        onClose={onClose}
+        afterClose={() => setVacantModal(null)}
+        onOpenChange={onOpenChange}
+      />
     </>
   );
 }
@@ -245,18 +215,20 @@ export default function VacanciesTable({ vacancies }: Props) {
 const renderCell = (
   item: VacancySubjectName,
   columnKey: React.Key,
-  setPostulationModal: (postulation: PostulationWithUser) => void,
-  markPostulation: (postulation: PostulationWithUser, mode: boolean) => void
+  setVacantModal: (vacant: VacancySubjectName | null) => void
 ) => {
   switch (columnKey) {
     case "subject":
       return item.subject.nombre;
+
     case "prepareers":
       return item.preparers;
+
     case "created-date":
       const formatedDateCreate = new Date(item.createdAt).toLocaleDateString();
 
       return formatedDateCreate;
+
     case "updated-date":
       if (!item.updatedAt) return "No se ha modificado aún";
 
@@ -285,7 +257,7 @@ const renderCell = (
               isIconOnly
               variant="light"
               className="text-lg active:opacity-50"
-              // onClick={() => setPostulationModal(item)}
+              onPress={() => setVacantModal(item)}
             >
               <IconEye />
             </Button>
@@ -312,11 +284,3 @@ const renderCell = (
       return null;
   }
 };
-function useFilterTable(arg0: {
-  data: unknown[];
-  defaultStatus: any;
-  statusOptions: any;
-  keyStatus: any;
-}): { filteredItems: any; statusFilter: any; setStatusFilter: any } {
-  throw new Error("Function not implemented.");
-}

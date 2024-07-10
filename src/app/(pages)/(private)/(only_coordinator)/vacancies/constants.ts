@@ -1,7 +1,7 @@
 import { StatusOption } from "@/lib/hooks/filter/useStatusFilter";
 import { Column } from "@/lib/hooks/table/useSelectColumns-Table";
 
-export const statusPostulations: StatusOption[] = [
+export const statusVacancies: StatusOption[] = [
   { name: "Abierta", uid: "true" },
   { name: "Cerrada", uid: "false" },
 ];
