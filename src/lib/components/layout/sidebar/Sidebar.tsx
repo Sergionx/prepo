@@ -1,30 +1,58 @@
 "use client";
 import React, { useState } from "react";
 import next from "next";
-import { Icon } from "@tabler/icons-react";
+import { Icon, IconClipboard, IconLogin2 } from "@tabler/icons-react";
 import Link from "next/link";
 
 import { usePathname } from "next/dist/client/components/navigation";
 import { SIDENAV_ITEMS } from "./messages/constants";
 import { SideNavItem } from "./messages/types";
+import { Button } from "@nextui-org/button";
 
 const Sidebar = () => {
   return (
-    <div className="md:w-60 bg-white h-screen flex-1 fixed border-r border-zinc-200 hidden md:flex -z-50">
-      <div className="flex flex-col space-y-6 w-full">
+    <div className="md:w-60 bg-white h-screen flex-1 fixed border-r border-zinc-200 hidden md:flex  z-[99]">
+      <div className="flex flex-col  w-full">
         <Link
           href="/"
           className="flex flex-row space-x-3 items-center justify-center md:justify-start md:px-6 border-b border-zinc-200 h-12 w-full"
         >
           {/* <span className="h-7 w-7 bg-zinc-300 rounded-lg" /> */}
 
-          <span className="font-bold text-xl hidden md:flex">CMS</span>
+          <span className="font-bold text-2xl hidden md:flex">Prepo</span>
         </Link>
 
-        <div className="flex flex-col space-y-2  md:px-6 ">
+        <div className="flex flex-col space-y-2 px-3 md:px-6 ">
           {SIDENAV_ITEMS.map((item, idx) => {
             return <MenuItem key={idx} item={item} />;
           })}
+        </div>
+
+        <div className="flex flex-col mt-auto p-4  md:w-60 ">
+          <Button
+            color="primary"
+            variant="flat"
+            className="flex my-2 p-2 justify-center "
+            size="lg"
+            href="/login"
+            onClick={() => (window.location.href = "/login")}
+          >
+            Iniciar Sesión
+          </Button>
+
+          <Button
+            color="primary"
+            variant="flat"
+            className="flex my-2 p-2 justify-center "
+            size="lg"
+            onClick={() => (window.location.href = "/signup")}
+          >
+            Registrarse
+          </Button>
+
+          {/* <span className="flex font-semibold text-xl rounded-lg  bg-slate-300  hover:bg-zinc-100 my-2 p-2 justify-center">
+              Registro
+            </span> */}
         </div>
       </div>
     </div>
