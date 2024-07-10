@@ -3,7 +3,7 @@
 import { useCallback, useState } from "react";
 
 import { IconPlus, IconSearch } from "@tabler/icons-react";
-import { Button, Input, Pagination } from "@nextui-org/react";
+import { Button, Input, Pagination, Spinner } from "@nextui-org/react";
 
 import { VacancySubjectName } from "@/lib/models/Vacancy";
 import VacancyCard from "./VacancyCard";
@@ -24,6 +24,7 @@ export default function VacancyList({
 }) {
   const [vacancy, setVacancy] = useState<VacancySubjectName | null>(null);
   const [postulation, setPostulation] = useState<Postulation | null>(null);
+  const [loadingPostulation, setLoadingPostulation] = useState(false);
 
   const {
     inputFilterValue,
@@ -130,12 +131,20 @@ export default function VacancyList({
             key={vacancy.id}
             vacancy={vacancy}
             onPress={async (vacancy) => {
-              if (user) {
-                const postulation = await getPostulation(vacancy.id, user.id);
-                setPostulation(postulation);
-              }
+              setLoadingPostulation(true);
 
-              setVacancy(vacancy);
+              try {
+                if (user) {
+                  const postulation = await getPostulation(vacancy.id, user.id);
+                  setPostulation(postulation);
+                }
+
+                setVacancy(vacancy);
+              } catch (error) {
+                throw error;
+              } finally {
+                setLoadingPostulation(false);
+              }
             }}
           />
         ))}
@@ -179,6 +188,12 @@ export default function VacancyList({
         onClose={() => setVacancy(null)}
         postulation={postulation}
       />
+
+      {loadingPostulation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+          <Spinner color="secondary" size="lg" />
+        </div>
+      )}
     </>
   );
 }
