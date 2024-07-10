@@ -57,11 +57,8 @@ export default function useFormSubmit<T extends FieldValues>({
           break;
 
         case "edit":
-          const { dirtyFields } = formState;
-          const toUpdate = getTouchedFields(data, dirtyFields);
-
           if (editAction) {
-            const description = await editAction(toUpdate);
+            const description = await editAction(data);
             message.description = description;
           }
           break;
