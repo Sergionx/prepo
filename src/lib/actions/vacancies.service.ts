@@ -59,15 +59,18 @@ export async function getVacancies_SubjectName_ById(vacancyId: number) {
   return vacancy;
 }
 
-export async function createVacancy({
-  id_materia,
-  description,
-  preparers,
-}: {
-  id_materia: string;
-  description: string;
-  preparers: number;
-}) {
+export async function createVacancy(
+  coordinatorId: number,
+  {
+    id_materia,
+    description,
+    preparers,
+  }: {
+    id_materia: string;
+    description: string;
+    preparers: number;
+  }
+) {
   const supabase = createClient();
 
   const { data, error } = await supabase
@@ -76,8 +79,32 @@ export async function createVacancy({
       id_materia: id_materia,
       description,
       preparers,
-      id_coord: -1,
+      id_coord: coordinatorId,
     })
+    .select();
+
+  if (error) throw error;
+
+  const vacancy = data[0] as Vacancy;
+
+  return vacancy;
+}
+
+export async function editVacancy(
+  vacancyId: number,
+  dataToUpdate: Partial<Vacancy>
+) {
+  const supabase = createClient();
+
+  console.log(dataToUpdate, vacancyId);
+
+  const { data, error } = await supabase
+    .from("Vacancies")
+    .update({
+      ...dataToUpdate,
+      updatedAt: new Date().toISOString(),
+    })
+    .eq("id", vacancyId)
     .select();
 
   if (error) throw error;

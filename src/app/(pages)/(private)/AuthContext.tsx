@@ -25,7 +25,6 @@ export function AuthProvider({
   baseUser: BaseUser | null;
   children: React.ReactNode;
 }) {
-  console.log("baseUser", baseUser);
   const user = useMemo(() => baseUser, [baseUser]);
 
   return (

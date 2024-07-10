@@ -1,5 +1,6 @@
 "use server";
 
+import { Subject } from "../models/Subject";
 import { createClient } from "../utils/supabase/server";
 
 export async function getAllSubjects() {
@@ -15,5 +16,5 @@ export async function getAllSubjects() {
     return [];
   }
 
-  return subjects;
+  return subjects as Subject[];
 }
