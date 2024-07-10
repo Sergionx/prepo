@@ -1,52 +1,75 @@
 "use client";
 
-import SubmitButton from "@/lib/components/forms/SubmitButton";
-import { Button } from "@nextui-org/button";
 import { IconNumber123 } from "@tabler/icons-react";
-import { submitVacancy } from "./action";
+import { submitCreateVacancy, submitUpdateVacancy } from "./action";
 
 import InputControl from "@/lib/components/forms/controls/InputControl";
 import TextareaControl from "@/lib/components/forms/controls/TextareaControl";
-import { IVacantForm, emptyForm, vacantFormSchema } from "./schema";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { emptyForm, vacantFormSchema } from "./schema";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import AutoCompleteControl from "@/lib/components/forms/controls/AutoCompleteControl";
 import { Subject } from "@/lib/models/Subject";
 import useFormSubmit from "@/lib/hooks/useFormSubmit";
 import { getFormData } from "@/lib/utils/forms";
+import { VacancySubjectName } from "@/lib/models/Vacancy";
+
+import { useEffect } from "react";
+import { useAuth } from "@/app/(pages)/(private)/AuthContext";
 
 interface Props {
+  onSucess: () => void;
   subjects: Subject[];
+  vacancy: VacancySubjectName | null;
 }
 
-export default function VacantForm({ subjects }: Props) {
-  const { control, formState, handleSubmit } = useForm({
-    defaultValues: { ...emptyForm },
+// FIXME Error raro con los inputs
+export default function VacantForm({ onSucess, subjects, vacancy }: Props) {
+  const { control, formState, handleSubmit, reset } = useForm({
+    defaultValues: emptyForm,
     mode: "all",
     resolver: zodResolver(vacantFormSchema),
   });
 
+  useEffect(() => {
+    if (vacancy) {
+      reset({
+        description: vacancy.description,
+        preparers: vacancy.preparers,
+        subject: vacancy.id_materia,
+      });
+    }
+  }, [vacancy]);
+
+  const { user } = useAuth();
+
   const { onSubmit } = useFormSubmit({
-    mode: "add",
+    mode: vacancy ? "edit" : "add",
     addAction: (data) => {
+      if (!user) throw new Error("No user found");
+
       const formData = getFormData(data);
-      return submitVacancy(formData);
+      return submitCreateVacancy(user.id, formData);
     },
+    editAction: (data) => {
+      if (!vacancy) {
+        throw new Error("No vacancy to edit");
+      }
+
+      console.log(data);
+      const formData = getFormData(data);
+      return submitUpdateVacancy(vacancy.id, formData);
+    },
+    onSucess,
     formState,
   });
 
-  return (
+  const vacantForm = (
     <form
+      id="vacancy"
       onSubmit={handleSubmit(onSubmit)}
-      className="max-w-xl w-full space-y-6
-        p-6 bg-slate-400/20 rounded-lg backdrop-blur-md
-        border-2 border-slate-400/50 shadow-lg
-        "
+      className="mt-4 space-y-6 w-full"
     >
-      <h4 className="text-lg font-semibold text-center text-balance text-white">
-        Vacante para preparadurías
-      </h4>
-
       <div className="flex flex-row gap-4">
         <AutoCompleteControl
           label="Materia"
@@ -68,21 +91,14 @@ export default function VacantForm({ subjects }: Props) {
           min={1}
         />
       </div>
-
+      
       <TextareaControl
         label="Descripción"
         control={control}
         name="description"
       />
-
-      <footer className="flex gap-4">
-        <SubmitButton
-          isLoading={formState.isLoading || formState.isSubmitting}
-        />
-        <Button variant="light" className="text-white">
-          Cancelar
-        </Button>
-      </footer>
     </form>
   );
+
+  return { vacantForm, formState };
 }
