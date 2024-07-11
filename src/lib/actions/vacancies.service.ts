@@ -96,8 +96,6 @@ export async function editVacancy(
 ) {
   const supabase = createClient();
 
-  console.log(dataToUpdate, vacancyId);
-
   const { data, error } = await supabase
     .from("Vacancies")
     .update({

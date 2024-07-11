@@ -22,7 +22,8 @@ export default async function Postulations({ params: { id } }: Props) {
         <h1 className="text-2xl font-bold mb-2">Postulaciones</h1>
         <h2 className="text-xl font-semibold mb-2">{vacancy.subject.nombre}</h2>
 
-        <p className="text-lg mb-6">{vacancy.description}</p>
+        <p className="text-lg mb-2">{vacancy.description}</p>
+        <p className="mb-6">Puestos restantes: {vacancy.preparadores_restantes}</p>
 
         <PostulationsTable postulations={postulations} vacancy={vacancy} />
       </div>
