@@ -140,7 +140,7 @@ export default function SignUpForm() {
       />
       {isCoordinator && (
         <SelectControl
-          label="Campo adicional"
+          label="Departamento"
           control={control}
           items={departamentos}
           name="departamento"
