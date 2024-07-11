@@ -16,7 +16,7 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
   },
   {
     title: "Vacantes",
-    path: "./vacancies",
+    path: "/vacancies",
     icon: <IconFileCheck width="24" height="24" />,
     //submenu: true,
     // subMenuItems: [
