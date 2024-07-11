@@ -11,3 +11,10 @@ export interface BaseUser {
   tipo_usuario: UserType;
   updatedAt: string;
 }
+
+
+export interface Preparador {
+  nombre: string;
+  materia: string[];
+  foto: string;
+}
