@@ -4,6 +4,7 @@ export interface Vacancy {
   description: string;
   abierto: boolean;
   id_materia: string;
+  preparadores_restantes: number;
   createdAt: string;
   updatedAt?: string;
 }

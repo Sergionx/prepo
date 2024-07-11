@@ -42,6 +42,7 @@ type NoHookDropdownTableProps<T> = Omit<
 
 export interface Props<T> extends Omit<TableProps, "children"> {
   data: T[];
+  maxSelection: number;
 
   statusOptions: StatusOption[];
   keyStatus: keyof T;
@@ -68,6 +69,7 @@ export interface Props<T> extends Omit<TableProps, "children"> {
 
 export default function DataTable<T>({
   data,
+  maxSelection,
 
   statusOptions,
   keyStatus,
@@ -295,7 +297,13 @@ export default function DataTable<T>({
       sortDescriptor={sortDescriptor}
       topContent={topContent}
       topContentPlacement="outside"
-      onSelectionChange={setSelectedKeys}
+      onSelectionChange={(selection) => {
+        if (selection === "all") return;
+
+        if (selection.size <= maxSelection) {
+          setSelectedKeys(selection);
+        }
+      }}
       onSortChange={setSortDescriptor}
       {...props}
     >

@@ -15,6 +15,6 @@ export interface BaseUser {
 
 export interface Preparador {
   nombre: string;
-  materia: string[];
+  materias: string[];
   foto: string;
 }

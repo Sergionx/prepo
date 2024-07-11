@@ -185,6 +185,7 @@ export default function PostulationsTable({ postulations, vacancy }: Props) {
         }}
         color={color}
         emptyContent="No hay estudiantes postulados aún"
+        maxSelection={vacancy.preparadores_restantes}
       >
         {(postulation) => (
           <TableRow
@@ -257,14 +258,10 @@ const renderCell = (
       return <div className="mr-3">{item.nota}</div>;
 
     case "status":
+      const [color, message] = getStatusChipInfo(item.aceptada);
       return (
-        <Chip
-          className="capitalize"
-          color={item.aceptada ? "success" : "danger"}
-          size="sm"
-          variant="flat"
-        >
-          {item.aceptada ? "aceptada" : "rechazada"}
+        <Chip className="capitalize" color={color} size="sm" variant="flat">
+          {message}
         </Chip>
       );
     case "actions":
@@ -315,3 +312,10 @@ const renderCell = (
       return null;
   }
 };
+
+function getStatusChipInfo(
+  status: boolean | null
+): ["success" | "danger" | "warning", string] {
+  if (status === null) return ["warning", "Pendiente"];
+  return status ? ["success", "Aceptada"] : ["danger", "Rechazada"];
+}

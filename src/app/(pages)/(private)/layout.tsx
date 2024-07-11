@@ -13,7 +13,6 @@ export default async function PrivateLayoutexport({
 
   const { data, error } = await supabase.auth.getUser();
 
-  console.log("user: ", data);
   if (error || !data?.user) {
     redirect("/login");
   }

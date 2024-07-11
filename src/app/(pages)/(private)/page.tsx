@@ -1,11 +1,5 @@
 import React, { Suspense } from "react";
-import {
-  Navbar,
-  NavbarContent,
-  NavbarItem,
-  Link,
-  Button,
-} from "@nextui-org/react";
+
 import Skeleton from "./VacancyList/Skeleton";
 import VacancyListFetch from "./VacancyList/VacancyListFetch";
 
