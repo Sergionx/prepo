@@ -26,7 +26,6 @@ export async function createPostulation(
   // TODO Typear
   const postulation = data[0] as Postulation;
 
-  console.log(postulation);
   return postulation;
 }
 
