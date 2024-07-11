@@ -5,7 +5,7 @@ import { Button, ButtonProps } from "@nextui-org/button";
 import { Spinner } from "@nextui-org/spinner";
 import React from "react";
 
-interface Props extends Omit<ButtonProps, "chidlren"> {
+interface Props extends Omit<ButtonProps, "chidlren" | "isDisabled"> {
   text?: string;
   isLoading: boolean;
   loadingText?: string;
@@ -23,7 +23,7 @@ export default function SubmitButton({
       type="submit"
       color="primary"
       className={cn(className)}
-      disabled={isLoading || disabled}
+      isDisabled={isLoading || disabled}
       {...props}
     >
       {isLoading && <Spinner color="default" size="sm" />}
