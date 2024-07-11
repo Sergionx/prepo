@@ -12,12 +12,12 @@ export async function getAllPreparers() {
   const students: Preparador[] = [
     {
       nombre: 'Carlos Cárdenas',
-      materia: ['Matemática2', 'Física1'],
+      materias: ['Matemática2', 'Física1'],
       foto: 'https://i.pravatar.cc/150?u=a042581f4e29026024d'
     },
     {
       nombre: 'Valeria Zampetti',
-      materia: ['EDD'],
+      materias: ['EDD'],
       foto: 'https://i.pravatar.cc/150?u=a042581f4e29026024d'
     },
 
