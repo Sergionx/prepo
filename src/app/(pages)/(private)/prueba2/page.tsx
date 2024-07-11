@@ -15,13 +15,6 @@ export async function submitHorario(
     id_Preparador: number,
     id_Materia: string
   ) {
-    const dataToPost = {
-      // dia: formData.get("Dia") as string,
-      // hora_Inicio: formData.get("hora_Inicio") as string,
-      // hora_Fin: formData.get("hora_Fin") as string,
-      // id_Preparador: Number(formData.get("id_Preparador")),
-      // id_Materia:  formData.get("id_Materia") as string
-    };
   
     try {
       //const { dia,hora_Inicio,hora_Fin,id_Preparador,id_Materia} = postulationFormSchema.parse(dataToPost);
@@ -34,8 +27,8 @@ export async function submitHorario(
     }
   }
 
-  export async function table{
+  // export async function tablehorario{
     
-  }
+  // }
 
 
