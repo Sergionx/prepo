@@ -52,7 +52,7 @@ export default function Horario() {
     </main>
   );
 }
-export async function submitHorario(
+async function submitHorario(
   //formData: FormData,
   //id: number,
   //createdAt: string,
