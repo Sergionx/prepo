@@ -18,8 +18,8 @@ export default function OnlyCoordinatorLayout({
   }
 
   if (user.tipo_usuario !== UserType.COORDINATOR) {
-    // router.push("/login");
-    // return null;
+    router.push("/login");
+    return null;
   }
 
   return <div>{children}</div>;

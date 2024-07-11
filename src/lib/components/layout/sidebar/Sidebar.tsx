@@ -8,6 +8,7 @@ import { usePathname } from "next/dist/client/components/navigation";
 import { SIDENAV_ITEMS } from "./messages/constants";
 import { SideNavItem } from "./messages/types";
 import { Button } from "@nextui-org/button";
+import { cn } from "@/lib/utils/classNames";
 
 const Sidebar = () => {
   return (
@@ -22,7 +23,7 @@ const Sidebar = () => {
           <span className="font-bold text-2xl hidden md:flex">Prepo</span>
         </Link>
 
-        <div className="flex flex-col space-y-2 px-3 md:px-6 ">
+        <div className="flex flex-col space-y-2 px-3 md:px-6 pt-2">
           {SIDENAV_ITEMS.map((item, idx) => {
             return <MenuItem key={idx} item={item} />;
           })}
@@ -68,6 +69,7 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
     setSubMenuOpen(!subMenuOpen);
   };
 
+  console.log(pathname, item.path, pathname.includes(item.path));
   return (
     <div className="">
       {item.submenu ? (
@@ -90,28 +92,26 @@ const MenuItem = ({ item }: { item: SideNavItem }) => {
 
           {subMenuOpen && (
             <div className="my-2 ml-12 flex flex-col space-y-4">
-              {item.subMenuItems?.map((subItem, idx) => {
-                return (
-                  <Link
-                    key={idx}
-                    href={subItem.path}
-                    className={`${
-                      subItem.path === pathname ? "font-bold" : ""
-                    }`}
-                  >
-                    <span>{subItem.title}</span>
-                  </Link>
-                );
-              })}
+              {item.subMenuItems?.map((subItem, idx) => (
+                <Link
+                  key={idx}
+                  href={subItem.path}
+                  className={cn(pathname.includes(item.path) && "font-bold")}
+                >
+                  <span>{subItem.title}</span>
+                </Link>
+              ))}
             </div>
           )}
         </>
       ) : (
         <Link
           href={item.path}
-          className={`flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100 ${
-            item.path === pathname ? "bg-zinc-100" : ""
-          }`}
+          className={cn(
+            "flex flex-row space-x-4 items-center p-2 rounded-lg hover:bg-zinc-100",
+            item.path !== "/" && pathname.includes(item.path) && "bg-zinc-100",
+            item.path === "/" && pathname === item.path && "bg-zinc-100"
+          )}
         >
           {item.icon}
           <span className="font-semibold text-xl flex">{item.title}</span>

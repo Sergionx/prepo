@@ -90,13 +90,13 @@ export default function PostulationsTable({ postulations, vacancy }: Props) {
         id_vacante,
         mode === "aceptar" ? true : false
       );
+      const studentMessage = ` a ${nameStudents.join(", ")} exitosamente`;
 
       showToast({
         title: "Éxito",
         description:
-          mode === "aceptar"
-            ? `Se aceptó`
-            : `Se descalificó` + ` a ${nameStudents.join(", ")} exitosamente`,
+          `Se ${mode === "aceptar" ? "aceptó" : "descalificó"}` +
+          ` a ${nameStudents.join(", ")} exitosamente`,
         variant: "success",
       });
     } catch (error: any) {

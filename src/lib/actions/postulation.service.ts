@@ -96,7 +96,7 @@ export async function markPostulationStatus(
 
   if (error) throw error;
 
-  revalidatePath("/vacancies/[id]/postulations");
+  revalidatePath("/vacancies");
   return data;
 }
 
@@ -116,7 +116,7 @@ export async function markPostulationsStudentStatus(
 
   if (error) throw error;
 
-  revalidatePath("/vacancies/[id]/postulations");
+  revalidatePath("/vacancies");
 
   return data;
 }
