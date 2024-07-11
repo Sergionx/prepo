@@ -1,6 +1,6 @@
 import { Skeleton } from "@nextui-org/react";
 import React, { Suspense } from "react";
-import PreparerListFetch from "./PreparerListFetch";
+import PreparerListFetch from "./PreparerList/PreparerListFetch";
 
 export default function Page() {
   return (

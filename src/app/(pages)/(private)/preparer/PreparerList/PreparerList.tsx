@@ -8,9 +8,9 @@ export default function PreparerList({
   preparadores: Preparador[];
 }) {
   return (
-    <div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
       {preparadores.map((preparador, index) => (
-        <PreparerCard preparador={preparador} />
+        <PreparerCard preparador={preparador} key={index} />
       ))}
     </div>
   );
