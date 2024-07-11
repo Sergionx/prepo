@@ -31,6 +31,11 @@ export const SIDENAV_ITEMS: SideNavItem[] = [
     path: "/preparer",
     icon: <IconChalkboard width="24" height="24" />,
   },
+  {
+    title: "Horario",
+    path: "/horario",
+    icon: <IconChalkboard width="24" height="24" />,
+  }
   // {
   //   title: "Inicio de Sesión",
   //   path: "/login",
