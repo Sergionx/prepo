@@ -1,5 +1,7 @@
 'use client'
+import { createHorario } from "@/lib/actions/horario.service";
 import { useForm,useFormContext } from "react-hook-form";
+import { submitHorario } from "../prueba2/page";
 
 export default function Horario() {
     const {
@@ -7,27 +9,10 @@ export default function Horario() {
         handleSubmit, 
         formState : { errors }
       } = useForm();
-      const onSubmit = handleSubmit((data) => {
-        const filteredData = Object.entries(data)
-        .filter(([day, value]) => value !== '')
-        .reduce((acc, [day, value]) => {
-        acc[day] = value;
-        return acc;
-      }, {});
-
-        console.log(filteredData); //Era para probar si guardaba la data y la resivia bien falta conectar esto y actualizarlo con supabase
-      });
-
-      const validateTimeRange = (value) => {
-        if (!value) return true;
-        const [start, end] = value.split('-');
-        const [startHour, startMinute] = start.split(':').map(Number);
-        const [endHour, endMinute] = end.split(':').map(Number);
-    
-        const duration = (endHour * 60 + endMinute) - (startHour * 60 + startMinute);
-        return duration <= 90; // Max 1 hora y media
-      };
-
+  
+    const onSubmit = handleSubmit((data) => {
+        submitHorario(data.Dia,data.horaInicio , data.horaFin , 20211110396, 'BPTFI01');
+    });
 
 return (
     <main className="py-12 px-6">
@@ -37,52 +22,43 @@ return (
 
         </div>
         <form onSubmit={handleSubmit(onSubmit)}>
-           
+        
         <div>
-          <label htmlFor="monday">Lunes:</label>
-          <input
-            type="text"
-            id="monday"
-            {...register('monday', {validate: validateTimeRange })}
-          />
-          {errors.monday && <span> No debe estar vacio o exceder 1 hora y media</span>}
+            <label htmlFor="Dia">Dia:</label>
+                <input
+                    type="text"
+                    id="dia"
+                    {...register('Dia',)}
+                />
         </div>
+
         <div>
-          <label htmlFor="tuesday">Martes:</label>
-          <input
-            type="text"
-            id="tuesday"
-            {...register('tuesday', {validate: validateTimeRange })}
-          />
-          {errors.tuesday && <span>El rango de tiempo no debe exceder 1 hora y media</span>}
+            <label htmlFor="Materia">Materia:</label>
+                <input
+                    type="text"
+                    id="materia"
+                    {...register('Materia',)}
+                />
         </div>
+
         <div>
-          <label htmlFor="wednesday">Miércoles:</label>
-          <input
-            type="text"
-            id="wednesday"
-            {...register('wednesday', { validate: validateTimeRange })}
-          />
-          {errors.wednesday && <span>El rango de tiempo no debe exceder 1 hora y media</span>}
+            <label htmlFor="HoraInicio">Hora de Inicio:</label>
+                <input
+                    type="text"
+                    id="horainicio"
+                    {...register('horaInicio',)}
+                />
         </div>
+
         <div>
-          <label htmlFor="thursday">Jueves:</label>
-          <input
-            type="text"
-            id="thursday"
-            {...register('thursday', { validate: validateTimeRange })}
-          />
-          {errors.thursday && <span>El rango de tiempo no debe exceder 1 hora y media</span>}
+            <label htmlFor="HoraFin">Hora de Fin:</label>
+                <input
+                    type="text"
+                    id="horaFin"
+                    {...register('horaFin',)}
+                />
         </div>
-        <div>
-          <label htmlFor="friday">Viernes:</label>
-          <input
-            type="text"
-            id="friday"
-            {...register('friday', { validate: validateTimeRange })}
-          />
-          {errors.friday && <span>El rango de tiempo no debe exceder 1 hora y media</span>}
-        </div>
+
         <button type="submit">Guardar</button>
       </form>
       </div>
